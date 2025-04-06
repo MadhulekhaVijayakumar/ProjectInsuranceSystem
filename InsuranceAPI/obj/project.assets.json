@@ -4166,11 +4166,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Asus\\Desktop\\Backend-Automobile\\InsuranceAPI\\InsuranceAPI.csproj",
+      "projectUniqueName": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceAPI\\InsuranceAPI.csproj",
       "projectName": "InsuranceAPI",
-      "projectPath": "C:\\Users\\Asus\\Desktop\\Backend-Automobile\\InsuranceAPI\\InsuranceAPI.csproj",
+      "projectPath": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceAPI\\InsuranceAPI.csproj",
       "packagesPath": "C:\\Users\\Asus\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Asus\\Desktop\\Backend-Automobile\\InsuranceAPI\\obj\\",
+      "outputPath": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Asus\\AppData\\Roaming\\NuGet\\NuGet.Config",
