@@ -1,0 +1,28 @@
+[
+  {
+    "ContainingType": "InsuranceAPI.Controllers.ClientController",
+    "Method": "CreateClient",
+    "RelativePath": "api/Client",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "InsuranceAPI.Models.DTOs.CreateClientRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "InsuranceAPI.Models.DTOs.CreateClientResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  }
+]
