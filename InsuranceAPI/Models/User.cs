@@ -9,6 +9,7 @@ namespace InsuranceAPI.Models
         public byte[] Password { get; set; }
     
         public byte[] HashKey { get; set; }
+        public string Role { get; set; }=string.Empty;
 
         public Client? Client { get; set; }//navigation
         public Admin? Admin { get; set; }

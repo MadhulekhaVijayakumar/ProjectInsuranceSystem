@@ -1,5 +1,57 @@
 [
   {
+    "ContainingType": "InsuranceAPI.Controllers.AdminController",
+    "Method": "CreateAdmin",
+    "RelativePath": "api/Admin/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "InsuranceAPI.Models.DTOs.CreateAdminRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "InsuranceAPI.Models.DTOs.CreateAdminResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "InsuranceAPI.Controllers.AuthenticationController",
+    "Method": "Login",
+    "RelativePath": "api/Authentication/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "loginRequest",
+        "Type": "InsuranceAPI.Models.DTOs.UserLoginRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "InsuranceAPI.Models.DTOs.LoginResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "InsuranceAPI.Controllers.ClientController",
     "Method": "CreateClient",
     "RelativePath": "api/Client",

@@ -31,9 +31,15 @@ namespace InsuranceAPI
             #region Repositories
             builder.Services.AddScoped<IRepository<int,Client>,ClientRepository>();
             builder.Services.AddScoped<IRepository<string,User>,UserRepository>();
+            builder.Services.AddScoped<IRepository<int,Admin>,AdminRepository>();
+           
             #endregion
             #region Services
             builder.Services.AddScoped<IClientService,ClientService>();
+            builder.Services.AddScoped<IAdminService,AdminService>();
+            builder.Services.AddScoped<IAuthenticationService,AuthenticationService>();
+            builder.Services.AddScoped<ITokenService,TokenService>();
+            
             #endregion
 
             var app = builder.Build();
@@ -44,6 +50,7 @@ namespace InsuranceAPI
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

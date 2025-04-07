@@ -32,20 +32,27 @@ namespace InsuranceAPI.Services
             if (clientResult == null)
                 throw new Exception("Failed to create client");
 
-            return new CreateClientResponse { Id = clientResult.Id };
+            return new CreateClientResponse
+            {
+                Id = clientResult.Id,
+                Message = "Client created successfully"
+            };
+
         }
 
         private Client MapClient(CreateClientRequest request)
         {
-            Client client = new Client
+            return new Client
             {
                 Name = request.Name,
                 DateOfBirth = request.DateOfBirth,
                 Gender = request.Gender,
                 PhoneNumber = request.PhoneNumber,
-                Email = request.Email
+                Email = request.Email,
+                AadhaarNumber = request.AadhaarNumber,
+                PANNumber = request.PANNumber,
+                Address = request.Address
             };
-            return client;
         }
 
         private User MapClientToUser(CreateClientRequest request, byte[] passwordHash, byte[] key)
@@ -54,7 +61,8 @@ namespace InsuranceAPI.Services
             {
                 Username = request.Email,
                 Password = passwordHash,
-                HashKey = key
+                HashKey = key,
+                Role="Client"
             };
             return user;
         }

@@ -1,12 +1,19 @@
 ﻿using InsuranceAPI.Context;
 using InsuranceAPI.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace InsuranceAPI.Repositories
 {
-    public abstract class Repository<K, T> : ReadOnlyRepository<K, T>, IRepository<K, T> where T : class
+    public abstract class Repository<K, T> : IRepository<K, T> where T : class
     {
-        protected Repository(InsuranceManagementContext context) : base(context) { }
+        protected readonly InsuranceManagementContext _context;
 
+        protected Repository(InsuranceManagementContext context)
+        {
+            _context = context;
+        }
+        public abstract Task<IEnumerable<T>> GetAll();
+        public abstract Task<T> GetById(K key);
         public async Task<T> Add(T entity)
         {
             _context.Add(entity);

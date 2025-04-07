@@ -17,7 +17,8 @@ namespace InsuranceAPI.Migrations
                 {
                     Username = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Password = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    HashKey = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
+                    HashKey = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -51,10 +52,13 @@ namespace InsuranceAPI.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "date", nullable: false),
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AadhaarNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PANNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

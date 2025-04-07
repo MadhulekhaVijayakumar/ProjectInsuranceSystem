@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InsuranceAPI.Migrations
 {
     [DbContext(typeof(InsuranceManagementContext))]
-    [Migration("20250406095715_init")]
+    [Migration("20250407092810_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -57,8 +57,16 @@ namespace InsuranceAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AadhaarNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -69,6 +77,10 @@ namespace InsuranceAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PANNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -96,6 +108,10 @@ namespace InsuranceAPI.Migrations
                     b.Property<byte[]>("Password")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Username");
 

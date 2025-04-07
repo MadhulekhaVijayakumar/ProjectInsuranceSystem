@@ -22,11 +22,11 @@ namespace InsuranceAPI.Repositories
         public override async Task<IEnumerable<Client>> GetAll()
         {
 
-            var employees = _context.Clients.Include(e => e.User);
-            if (employees.Count() == 0)
+            var clients = _context.Clients.Include(e => e.User);
+            if (clients.Count() == 0)
                 throw new Exception("No clients found");
 
-            return employees;
+            return clients;
         }
     }
 }
