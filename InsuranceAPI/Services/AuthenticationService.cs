@@ -1,6 +1,7 @@
 ﻿using InsuranceAPI.Interfaces;
 using InsuranceAPI.Models;
 using InsuranceAPI.Models.DTOs;
+using InsuranceAPI.Repositories;
 using System.Security.Cryptography;
 namespace InsuranceAPI.Services
 {
@@ -9,12 +10,16 @@ namespace InsuranceAPI.Services
         private readonly IRepository<string, User> _userRepository;
         private IRepository<int, Client> _clientRepository;
         private readonly ITokenService _tokenService;
+        private readonly IRepository<int,Admin> _adminRepository;
 
         public AuthenticationService(IRepository<string, User> userRpository,
-                                     IRepository<int, Client> clientRepository, ITokenService tokenService)
+                                     IRepository<int, Client> clientRepository,
+                                     IRepository<int,Admin> adminrRepository,
+                                     ITokenService tokenService)
         {
             _userRepository = userRpository;
             _clientRepository = clientRepository;
+            _adminRepository = adminrRepository;
             _tokenService = tokenService;
         }
         public async Task<LoginResponse> Login(UserLoginRequest loginRequest)
@@ -44,8 +49,8 @@ namespace InsuranceAPI.Services
             }
             else if (user.Role == "Admin")
             {
-                // Similar logic if you have AdminRepository
-                var admin = user.Admin; // or query from admin repo
+
+                var admin = (await _adminRepository.GetAll()).FirstOrDefault(a => a.Email == loginRequest.Username);
                 if (admin == null)
                     throw new UnauthorizedAccessException("Admin not found");
                 name = admin.Name;

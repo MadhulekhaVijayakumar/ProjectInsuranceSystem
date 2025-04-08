@@ -14,7 +14,7 @@ namespace InsuranceAPI.Repositories
         {
             var admin = await _context.Admins.FindAsync(key);
             if (admin == null)
-                throw new Exception($"Admin with ID {key} not found");
+                throw new Exception($"Admin with  {key} not found");
             return admin;
         }
 

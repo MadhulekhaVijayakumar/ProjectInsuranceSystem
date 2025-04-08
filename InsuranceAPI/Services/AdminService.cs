@@ -47,7 +47,7 @@ namespace InsuranceAPI.Services
             return new CreateAdminResponse
             {
                 Id = adminResult.Id,
-                Message = "Client created successfully"
+                Message = "Admin created successfully"
             };
 
         }

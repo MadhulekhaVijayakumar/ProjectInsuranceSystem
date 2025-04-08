@@ -23,8 +23,12 @@ namespace InsuranceAPI.Services
                     new Claim(ClaimTypes.Role, role)
 
                 };
+                if (role == "Client")
+                {
+                    claims.Add(new Claim("ClientId", id.ToString()));
+                }
 
-                var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256Signature);
+            var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256Signature);
 
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
