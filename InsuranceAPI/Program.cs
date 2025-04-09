@@ -49,6 +49,7 @@ namespace InsuranceAPI
                      }
             });
             });
+            builder.Services.AddHttpContextAccessor();
 
             #region Context
             builder.Services.AddDbContext<InsuranceManagementContext>(options =>
@@ -62,7 +63,12 @@ namespace InsuranceAPI
             builder.Services.AddScoped<IRepository<int,Admin>,AdminRepository>();
             builder.Services.AddScoped<IRepository<int,Proposal>,ProposalRepository>();
             builder.Services.AddScoped<IRepository<int,Vehicle>,VehicleRepository>();
-           
+            builder.Services.AddScoped<IRepository<int,InsuranceDetails>,InsuranceDetailsRepository>();
+
+            #endregion
+
+            #region Mapper
+            builder.Services.AddAutoMapper(typeof(Client));
             #endregion
             #region Services
             builder.Services.AddScoped<IClientService,ClientService>();
@@ -71,6 +77,7 @@ namespace InsuranceAPI
             builder.Services.AddScoped<ITokenService,TokenService>();
             builder.Services.AddScoped<IVehicleService,VehicleService>();
             builder.Services.AddScoped<IProposalService,ProposalService>();
+            builder.Services.AddScoped<IPremiumCalculatorService, PremiumCalculatorService>();
 
             #endregion
 

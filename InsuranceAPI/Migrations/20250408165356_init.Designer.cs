@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InsuranceAPI.Migrations
 {
     [DbContext(typeof(InsuranceManagementContext))]
-    [Migration("20250407141312_AddVechileTypeToVehicle")]
-    partial class AddVechileTypeToVehicle
+    [Migration("20250408165356_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,62 @@ namespace InsuranceAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Client", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AadhaarNumber")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PANNumber")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AadhaarNumber")
+                        .IsUnique();
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("PANNumber")
+                        .IsUnique();
+
+                    b.ToTable("Clients");
+                });
 
             modelBuilder.Entity("InsuranceAPI.Models.Admin", b =>
                 {
@@ -49,7 +105,7 @@ namespace InsuranceAPI.Migrations
                     b.ToTable("Admins");
                 });
 
-            modelBuilder.Entity("InsuranceAPI.Models.Client", b =>
+            modelBuilder.Entity("InsuranceAPI.Models.InsuranceDetails", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -57,43 +113,44 @@ namespace InsuranceAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AadhaarNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal>("CalculatedPremium")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("Address")
+                    b.Property<string>("DamageInsurance")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime>("DateOfBirth")
+                    b.Property<DateTime>("InsuranceStartDate")
                         .HasColumnType("date");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<decimal>("InsuranceSum")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("Gender")
+                    b.Property<string>("LiabilityOption")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Plan")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("PANNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ProposalId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("VehicleId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email")
+                    b.HasIndex("ProposalId")
                         .IsUnique();
 
-                    b.ToTable("Clients");
+                    b.HasIndex("VehicleId");
+
+                    b.ToTable("InsuranceDetails");
                 });
 
             modelBuilder.Entity("InsuranceAPI.Models.Proposal", b =>
@@ -123,7 +180,8 @@ namespace InsuranceAPI.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<int>("VehicleId")
                         .HasColumnType("int");
@@ -155,9 +213,6 @@ namespace InsuranceAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Username");
-
-                    b.HasIndex("Username")
-                        .IsUnique();
 
                     b.ToTable("Users");
                 });
@@ -211,7 +266,8 @@ namespace InsuranceAPI.Migrations
 
                     b.Property<string>("VehicleNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("VehicleType")
                         .IsRequired()
@@ -220,9 +276,29 @@ namespace InsuranceAPI.Migrations
 
                     b.HasKey("VehicleId");
 
+                    b.HasIndex("ChassisNumber")
+                        .IsUnique();
+
                     b.HasIndex("ClientId");
 
+                    b.HasIndex("EngineNumber")
+                        .IsUnique();
+
+                    b.HasIndex("VehicleNumber")
+                        .IsUnique();
+
                     b.ToTable("Vehicles");
+                });
+
+            modelBuilder.Entity("Client", b =>
+                {
+                    b.HasOne("InsuranceAPI.Models.User", "User")
+                        .WithOne("Client")
+                        .HasForeignKey("Client", "Email")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("InsuranceAPI.Models.Admin", b =>
@@ -236,20 +312,28 @@ namespace InsuranceAPI.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("InsuranceAPI.Models.Client", b =>
+            modelBuilder.Entity("InsuranceAPI.Models.InsuranceDetails", b =>
                 {
-                    b.HasOne("InsuranceAPI.Models.User", "User")
-                        .WithOne("Client")
-                        .HasForeignKey("InsuranceAPI.Models.Client", "Email")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("InsuranceAPI.Models.Proposal", "Proposal")
+                        .WithOne("InsuranceDetails")
+                        .HasForeignKey("InsuranceAPI.Models.InsuranceDetails", "ProposalId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.HasOne("InsuranceAPI.Models.Vehicle", "Vehicle")
+                        .WithMany("InsuranceDetails")
+                        .HasForeignKey("VehicleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Proposal");
+
+                    b.Navigation("Vehicle");
                 });
 
             modelBuilder.Entity("InsuranceAPI.Models.Proposal", b =>
                 {
-                    b.HasOne("InsuranceAPI.Models.Client", "Client")
+                    b.HasOne("Client", "Client")
                         .WithMany("Proposals")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -268,7 +352,7 @@ namespace InsuranceAPI.Migrations
 
             modelBuilder.Entity("InsuranceAPI.Models.Vehicle", b =>
                 {
-                    b.HasOne("InsuranceAPI.Models.Client", "Client")
+                    b.HasOne("Client", "Client")
                         .WithMany("Vehicles")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -277,11 +361,16 @@ namespace InsuranceAPI.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("InsuranceAPI.Models.Client", b =>
+            modelBuilder.Entity("Client", b =>
                 {
                     b.Navigation("Proposals");
 
                     b.Navigation("Vehicles");
+                });
+
+            modelBuilder.Entity("InsuranceAPI.Models.Proposal", b =>
+                {
+                    b.Navigation("InsuranceDetails");
                 });
 
             modelBuilder.Entity("InsuranceAPI.Models.User", b =>
@@ -293,6 +382,8 @@ namespace InsuranceAPI.Migrations
 
             modelBuilder.Entity("InsuranceAPI.Models.Vehicle", b =>
                 {
+                    b.Navigation("InsuranceDetails");
+
                     b.Navigation("Proposals");
                 });
 #pragma warning restore 612, 618

@@ -54,10 +54,10 @@ namespace InsuranceAPI.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "date", nullable: false),
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    AadhaarNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PANNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AadhaarNumber = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false),
+                    PANNumber = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -78,6 +78,7 @@ namespace InsuranceAPI.Migrations
                     VehicleId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ClientId = table.Column<int>(type: "int", nullable: false),
+                    VehicleType = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     VehicleNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     ChassisNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     EngineNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
@@ -110,7 +111,7 @@ namespace InsuranceAPI.Migrations
                     InsuranceType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     InsuranceValidUpto = table.Column<DateTime>(type: "date", nullable: false),
                     FitnessValidUpto = table.Column<DateTime>(type: "date", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -130,6 +131,38 @@ namespace InsuranceAPI.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "InsuranceDetails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProposalId = table.Column<int>(type: "int", nullable: false),
+                    VehicleId = table.Column<int>(type: "int", nullable: false),
+                    InsuranceStartDate = table.Column<DateTime>(type: "date", nullable: false),
+                    InsuranceSum = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    DamageInsurance = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LiabilityOption = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Plan = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    CalculatedPremium = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InsuranceDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_InsuranceDetails_Proposals_ProposalId",
+                        column: x => x.ProposalId,
+                        principalTable: "Proposals",
+                        principalColumn: "ProposalId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_InsuranceDetails_Vehicles_VehicleId",
+                        column: x => x.VehicleId,
+                        principalTable: "Vehicles",
+                        principalColumn: "VehicleId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Admins_Email",
                 table: "Admins",
@@ -137,10 +170,33 @@ namespace InsuranceAPI.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Clients_AadhaarNumber",
+                table: "Clients",
+                column: "AadhaarNumber",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Clients_Email",
                 table: "Clients",
                 column: "Email",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Clients_PANNumber",
+                table: "Clients",
+                column: "PANNumber",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InsuranceDetails_ProposalId",
+                table: "InsuranceDetails",
+                column: "ProposalId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InsuranceDetails_VehicleId",
+                table: "InsuranceDetails",
+                column: "VehicleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Proposals_ClientId",
@@ -153,15 +209,27 @@ namespace InsuranceAPI.Migrations
                 column: "VehicleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_Username",
-                table: "Users",
-                column: "Username",
+                name: "IX_Vehicles_ChassisNumber",
+                table: "Vehicles",
+                column: "ChassisNumber",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vehicles_ClientId",
                 table: "Vehicles",
                 column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vehicles_EngineNumber",
+                table: "Vehicles",
+                column: "EngineNumber",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vehicles_VehicleNumber",
+                table: "Vehicles",
+                column: "VehicleNumber",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -169,6 +237,9 @@ namespace InsuranceAPI.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Admins");
+
+            migrationBuilder.DropTable(
+                name: "InsuranceDetails");
 
             migrationBuilder.DropTable(
                 name: "Proposals");

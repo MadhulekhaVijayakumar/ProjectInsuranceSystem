@@ -18,12 +18,23 @@ namespace InsuranceAPI.Context
         {
             // ---------------- USER RELATIONSHIPS ----------------
 
+            // Ensure Username is PK
+            modelBuilder.Entity<User>()
+                .HasKey(u => u.Username);
+
+            // One-to-one: Client.Email (FK) → User.Username (PK)
             modelBuilder.Entity<Client>()
                 .HasOne(c => c.User)
                 .WithOne(u => u.Client)
-                .HasForeignKey<Client>(c => c.Email)
-                .HasPrincipalKey<User>(u => u.Username)
+                .HasForeignKey<Client>(c => c.Email)          // Email is FK in Client
+                .HasPrincipalKey<User>(u => u.Username)       // Username is PK in User
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // Optional: Ensure Email is unique in Client
+            modelBuilder.Entity<Client>()
+                .HasIndex(c => c.Email)
+                .IsUnique();
+
 
             modelBuilder.Entity<Admin>()
                 .HasOne(a => a.User)
@@ -31,10 +42,6 @@ namespace InsuranceAPI.Context
                 .HasForeignKey<Admin>(a => a.Email)
                 .HasPrincipalKey<User>(u => u.Username)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.Username)
-                .IsUnique();
 
             // ---------------- CLIENT PROPERTIES ----------------
 

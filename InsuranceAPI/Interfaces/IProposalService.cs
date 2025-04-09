@@ -8,5 +8,8 @@ namespace InsuranceAPI.Interfaces
     public interface IProposalService
     {
         Task<CreateProposalResponse> SubmitProposalWithDetails(CreateProposalRequest request);
+        Task<IEnumerable<ProposalReviewDto>> GetSubmittedProposals();
+        Task<bool> VerifyProposal(int proposalId, bool approve);
+
     }
 }

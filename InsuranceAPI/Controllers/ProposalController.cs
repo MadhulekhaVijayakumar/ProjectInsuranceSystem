@@ -19,19 +19,40 @@ namespace InsuranceAPI.Controllers
         }
         [HttpPost("submit")]
         [Authorize(Roles = "Client")]
-        public async Task<ActionResult<CreateProposalResponse>> SubmitProposal(CreateProposalRequest request)
+        public async Task<ActionResult<CreateProposalResponse>> SubmitProposal([FromBody] CreateProposalRequest request)
         {
-            var clientIdClaim = User.Claims.FirstOrDefault(c => c.Type == "ClientId");
-            if (clientIdClaim == null)
-                return Unauthorized("Client ID not found in token.");
-
-            int clientId = int.Parse(clientIdClaim.Value);
-
-            request.ClientId = clientId; // Inject into request
-
-            var response = await _proposalService.SubmitProposalWithDetails(request);
-            return Ok(response);
+            try
+            {
+                var response = await _proposalService.SubmitProposalWithDetails(request);
+                return Ok(response);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Failed to submit proposal: {ex.Message}");
+            }
+        }
+        [HttpGet("admin/submitted")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<IEnumerable<ProposalReviewDto>>> GetSubmittedProposals()
+        {
+            var proposals = await _proposalService.GetSubmittedProposals();
+            return Ok(proposals);
         }
 
+        // 2. Approve or Reject a proposal
+        [HttpPut("admin/verify/{proposalId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> VerifyProposal(int proposalId, [FromQuery] bool approve)
+        {
+            var success = await _proposalService.VerifyProposal(proposalId, approve);
+            if (!success)
+                return BadRequest("Invalid proposal ID or status is not 'submitted'");
+
+            return Ok(new { message = approve ? "Proposal approved." : "Proposal rejected." });
+        }
     }
 }
