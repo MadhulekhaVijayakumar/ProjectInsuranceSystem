@@ -1,6 +1,7 @@
 
 using InsuranceAPI.Context;
 using InsuranceAPI.Interfaces;
+using InsuranceAPI.Misc;
 using InsuranceAPI.Models;
 using InsuranceAPI.Repositories;
 using InsuranceAPI.Services;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Security.Claims;
 using System.Text;
 
 namespace InsuranceAPI
@@ -51,6 +53,21 @@ namespace InsuranceAPI
             });
             builder.Services.AddHttpContextAccessor();
 
+            builder.Logging.AddLog4Net();
+
+            #region CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                               .AllowAnyMethod()
+                               .AllowAnyHeader();
+                    });
+            });
+            #endregion
+
             #region Context
             builder.Services.AddDbContext<InsuranceManagementContext>(options =>
             {
@@ -64,6 +81,12 @@ namespace InsuranceAPI
             builder.Services.AddScoped<IRepository<int,Proposal>,ProposalRepository>();
             builder.Services.AddScoped<IRepository<int,Vehicle>,VehicleRepository>();
             builder.Services.AddScoped<IRepository<int,InsuranceDetails>,InsuranceDetailsRepository>();
+            builder.Services.AddScoped<IRepository<string, Insurance>, InsuranceRepository>();
+            builder.Services.AddScoped<IRepository<int,Payment>,PaymentRepository>();
+            builder.Services.AddScoped<IRepository<int, Document>, DocumentRepository>();
+            builder.Services.AddScoped<InsuranceClaimRepository>();
+
+
 
             #endregion
 
@@ -78,6 +101,11 @@ namespace InsuranceAPI
             builder.Services.AddScoped<IVehicleService,VehicleService>();
             builder.Services.AddScoped<IProposalService,ProposalService>();
             builder.Services.AddScoped<IPremiumCalculatorService, PremiumCalculatorService>();
+            builder.Services.AddScoped<IInsuranceService, InsuranceService>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
+            builder.Services.AddScoped<IDocumentService, DocumentService>();
+            builder.Services.AddScoped<IInsuranceClaimService, InsuranceClaimService>();
+            builder.Services.AddScoped<InsurancePolicyNumberGenerator>();
 
             #endregion
 
@@ -91,7 +119,8 @@ namespace InsuranceAPI
                         ValidateAudience = false,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Keys:JwtToken"]))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Keys:JwtToken"])),
+                        RoleClaimType=ClaimTypes.Role
                     };
                 });
             #endregion

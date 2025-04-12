@@ -5,7 +5,7 @@ namespace InsuranceAPI.Models.DTOs
     public class CreateVehicleRequest
     {
         [Required]
-        public int ClientId { get; set; }
+ 
         public string VehicleType { get; set; }=string.Empty;
 
         [Required, MaxLength(20)]

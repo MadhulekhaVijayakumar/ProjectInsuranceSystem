@@ -1,23 +1,32 @@
 ﻿using InsuranceAPI.Interfaces;
 using InsuranceAPI.Models.DTOs;
 using InsuranceAPI.Models;
+using System.Security.Claims;
 
 namespace InsuranceAPI.Services
 {
     public class VehicleService : IVehicleService
     {
         private readonly IRepository<int, Vehicle> _vehicleRepo;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public VehicleService(IRepository<int, Vehicle> vehicleRepo)
+        public VehicleService(IRepository<int, Vehicle> vehicleRepo, IHttpContextAccessor httpContextAccessor)
         {
             _vehicleRepo = vehicleRepo;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<CreateVehicleResponse> RegisterVehicle(CreateVehicleRequest request)
+
         {
+
+            var clientIdClaim = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(clientIdClaim) || !int.TryParse(clientIdClaim, out int clientId))
+                throw new UnauthorizedAccessException("Client ID not found in token.");
             var vehicle = new Vehicle
             {
-                ClientId = request.ClientId,
+                ClientId = clientId,
                 VehicleType = request.VehicleType,
                 VehicleNumber = request.VehicleNumber,
                 ChassisNumber = request.ChassisNumber,
@@ -36,13 +45,13 @@ namespace InsuranceAPI.Services
 
         public async Task<IEnumerable<VehicleDto>> GetAllVehiclesByClient(int clientId)
         {
+            var clientIdClaim = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var vehicles = await _vehicleRepo.GetAll();
             return vehicles
                 .Where(v => v.ClientId == clientId)
                 .Select(v => new VehicleDto
                 {
                     VehicleId = v.VehicleId,
-                    ClientId = v.ClientId,
                     VechileType = v.VehicleType,
                     VehicleNumber = v.VehicleNumber,
                     ChassisNumber = v.ChassisNumber,
@@ -62,7 +71,6 @@ namespace InsuranceAPI.Services
             return new VehicleDto
             {
                 VehicleId = v.VehicleId,
-                ClientId = v.ClientId,
                 VechileType= v.VehicleType,
                 VehicleNumber = v.VehicleNumber,
                 ChassisNumber = v.ChassisNumber,

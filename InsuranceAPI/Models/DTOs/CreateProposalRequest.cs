@@ -7,6 +7,8 @@ namespace InsuranceAPI.Models.DTOs
         public CreateVehicleRequest Vehicle { get; set; }
         public CreateProposalData Proposal { get; set; }
         public CreateInsuranceDetailRequest InsuranceDetails { get; set; }
+        public ProposalDocumentUploadRequest? Documents { get; set; }
+
     }
 
 }

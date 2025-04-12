@@ -11,6 +11,8 @@ namespace InsuranceAPI.Services
         private readonly IRepository<int, Vehicle> _vehicleRepository;
         private readonly IRepository<int, InsuranceDetails> _insuranceDetailsRepository;
         private readonly IPremiumCalculatorService _premiumCalculatorService;
+        private readonly ILogger<ProposalService> _logger;
+        private readonly IDocumentService _documentService;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public ProposalService(
@@ -18,26 +20,32 @@ namespace InsuranceAPI.Services
             IRepository<int, Vehicle> vehicleRepo,
             IRepository<int, InsuranceDetails> insuranceRepo,
             IPremiumCalculatorService premiumCalculatorService,
+            IDocumentService documentService,
+           ILogger<ProposalService> logger,
             IHttpContextAccessor httpContextAccessor)
         {
             _proposalRepository = proposalRepo;
             _vehicleRepository = vehicleRepo;
             _insuranceDetailsRepository = insuranceRepo;
             _premiumCalculatorService = premiumCalculatorService;
+            _documentService = documentService;
+            _logger = logger;
             _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<CreateProposalResponse> SubmitProposalWithDetails(CreateProposalRequest request)
         {
-            // 1. Extract ClientId from JWT Token
+            _logger.LogInformation("Starting proposal submission process.");
+
             var clientIdClaim = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             if (string.IsNullOrEmpty(clientIdClaim) || !int.TryParse(clientIdClaim, out int clientId))
             {
+                _logger.LogWarning("Client ID missing or invalid in token.");
                 throw new UnauthorizedAccessException("Client ID not found in token.");
             }
 
-            // 2. Create and Save Vehicle from request.Vehicle
+            _logger.LogInformation("Creating vehicle for ClientId: {ClientId}", clientId);
             var vehicle = new Vehicle
             {
                 ClientId = clientId,
@@ -54,8 +62,8 @@ namespace InsuranceAPI.Services
             };
 
             var createdVehicle = await _vehicleRepository.Add(vehicle);
+            _logger.LogInformation("Vehicle created with ID: {VehicleId}", createdVehicle.VehicleId);
 
-            // 3. Create and Save Proposal from request.Proposal
             var proposal = new Proposal
             {
                 ClientId = clientId,
@@ -68,8 +76,8 @@ namespace InsuranceAPI.Services
             };
 
             var createdProposal = await _proposalRepository.Add(proposal);
+            _logger.LogInformation("Proposal created with ID: {ProposalId}", createdProposal.ProposalId);
 
-            // 4. Create InsuranceDetails from request.InsuranceDetails
             var insuranceDetails = new InsuranceDetails
             {
                 ProposalId = createdProposal.ProposalId,
@@ -81,28 +89,39 @@ namespace InsuranceAPI.Services
                 Plan = request.InsuranceDetails.Plan
             };
 
-            // 5. Calculate Premium
-            try
+            var premium = _premiumCalculatorService.CalculatePremium(insuranceDetails, vehicle);
+            insuranceDetails.CalculatedPremium = premium;
+
+            _logger.LogInformation("Calculated premium: {Premium}", premium);
+            await _insuranceDetailsRepository.Add(insuranceDetails);
+            _logger.LogInformation("Insurance details saved for ProposalId: {ProposalId}", createdProposal.ProposalId);
+
+            if (request.Documents != null)
             {
-                var premium = _premiumCalculatorService.CalculatePremium(insuranceDetails, vehicle);
-                insuranceDetails.CalculatedPremium = premium;
-
-                // 6. Save InsuranceDetails
-                await _insuranceDetailsRepository.Add(insuranceDetails);
-
-                // 7. Return response
-                return new CreateProposalResponse
+                try
                 {
-                    ProposalId = createdProposal.ProposalId,
-                    Status = createdProposal.Status,
-                    CalculatedPremium = premium
-                };
+                    request.Documents.ProposalId = createdProposal.ProposalId;
+                    await _documentService.SaveDocumentsAsync(request.Documents);
+                    _logger.LogInformation("Documents saved successfully for ProposalId: {ProposalId}", createdProposal.ProposalId);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Document upload failed for ProposalId: {ProposalId}", createdProposal.ProposalId);
+                    throw; // Optional: rethrow if you want to stop the process
+                }
             }
-            catch (Exception ex)
+
+            _logger.LogInformation("Proposal submission completed for ProposalId: {ProposalId}", createdProposal.ProposalId);
+
+            return new CreateProposalResponse
             {
-                throw new Exception("Error calculating premium: " + ex.Message);
-            }
+                ProposalId = createdProposal.ProposalId,
+                Status = createdProposal.Status,
+                CalculatedPremium = premium
+            };
         }
+
+
 
         public async Task<IEnumerable<ProposalReviewDto>> GetSubmittedProposals()
         {

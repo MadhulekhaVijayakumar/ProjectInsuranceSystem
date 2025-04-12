@@ -19,7 +19,8 @@ namespace InsuranceAPI.Controllers
         }
         [HttpPost("submit")]
         [Authorize(Roles = "Client")]
-        public async Task<ActionResult<CreateProposalResponse>> SubmitProposal([FromBody] CreateProposalRequest request)
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<CreateProposalResponse>> SubmitProposal([FromForm] CreateProposalRequest request)
         {
             try
             {
@@ -35,6 +36,7 @@ namespace InsuranceAPI.Controllers
                 return BadRequest($"Failed to submit proposal: {ex.Message}");
             }
         }
+
         [HttpGet("admin/submitted")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<ProposalReviewDto>>> GetSubmittedProposals()

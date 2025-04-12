@@ -102,6 +102,124 @@ namespace InsuranceAPI.Migrations
                     b.ToTable("Admins");
                 });
 
+            modelBuilder.Entity("InsuranceAPI.Models.Document", b =>
+                {
+                    b.Property<int>("DocumentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DocumentId"));
+
+                    b.Property<int?>("ClaimId")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("Data")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProposalId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DocumentId");
+
+                    b.HasIndex("ClaimId");
+
+                    b.HasIndex("ProposalId");
+
+                    b.ToTable("Documents");
+                });
+
+            modelBuilder.Entity("InsuranceAPI.Models.Insurance", b =>
+                {
+                    b.Property<string>("InsurancePolicyNumber")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("InsuranceStartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("InsuranceSum")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PremiumAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ProposalId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("VehicleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("InsurancePolicyNumber");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("ProposalId")
+                        .IsUnique();
+
+                    b.HasIndex("VehicleId");
+
+                    b.ToTable("Insurances");
+                });
+
+            modelBuilder.Entity("InsuranceAPI.Models.InsuranceClaim", b =>
+                {
+                    b.Property<int>("ClaimId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClaimId"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime>("IncidentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("InsurancePolicyNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasDefaultValue("Pending");
+
+                    b.HasKey("ClaimId");
+
+                    b.HasIndex("InsurancePolicyNumber");
+
+                    b.ToTable("InsuranceClaims");
+                });
+
             modelBuilder.Entity("InsuranceAPI.Models.InsuranceDetails", b =>
                 {
                     b.Property<int>("Id")
@@ -148,6 +266,39 @@ namespace InsuranceAPI.Migrations
                     b.HasIndex("VehicleId");
 
                     b.ToTable("InsuranceDetails");
+                });
+
+            modelBuilder.Entity("InsuranceAPI.Models.Payment", b =>
+                {
+                    b.Property<int>("PaymentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"));
+
+                    b.Property<decimal>("AmountPaid")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentMode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProposalId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TransactionStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PaymentId");
+
+                    b.HasIndex("ProposalId");
+
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("InsuranceAPI.Models.Proposal", b =>
@@ -309,6 +460,62 @@ namespace InsuranceAPI.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("InsuranceAPI.Models.Document", b =>
+                {
+                    b.HasOne("InsuranceAPI.Models.InsuranceClaim", "Claim")
+                        .WithMany("Documents")
+                        .HasForeignKey("ClaimId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("InsuranceAPI.Models.Proposal", "Proposal")
+                        .WithMany("Documents")
+                        .HasForeignKey("ProposalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Claim");
+
+                    b.Navigation("Proposal");
+                });
+
+            modelBuilder.Entity("InsuranceAPI.Models.Insurance", b =>
+                {
+                    b.HasOne("Client", "Client")
+                        .WithMany("Insurances")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InsuranceAPI.Models.Proposal", "Proposal")
+                        .WithOne("Insurance")
+                        .HasForeignKey("InsuranceAPI.Models.Insurance", "ProposalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InsuranceAPI.Models.Vehicle", "Vehicle")
+                        .WithMany("Insurances")
+                        .HasForeignKey("VehicleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Proposal");
+
+                    b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("InsuranceAPI.Models.InsuranceClaim", b =>
+                {
+                    b.HasOne("InsuranceAPI.Models.Insurance", "Insurance")
+                        .WithMany("Claims")
+                        .HasForeignKey("InsurancePolicyNumber")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Insurance");
+                });
+
             modelBuilder.Entity("InsuranceAPI.Models.InsuranceDetails", b =>
                 {
                     b.HasOne("InsuranceAPI.Models.Proposal", "Proposal")
@@ -326,6 +533,17 @@ namespace InsuranceAPI.Migrations
                     b.Navigation("Proposal");
 
                     b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("InsuranceAPI.Models.Payment", b =>
+                {
+                    b.HasOne("InsuranceAPI.Models.Proposal", "Proposal")
+                        .WithMany("Payments")
+                        .HasForeignKey("ProposalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Proposal");
                 });
 
             modelBuilder.Entity("InsuranceAPI.Models.Proposal", b =>
@@ -360,14 +578,32 @@ namespace InsuranceAPI.Migrations
 
             modelBuilder.Entity("Client", b =>
                 {
+                    b.Navigation("Insurances");
+
                     b.Navigation("Proposals");
 
                     b.Navigation("Vehicles");
                 });
 
+            modelBuilder.Entity("InsuranceAPI.Models.Insurance", b =>
+                {
+                    b.Navigation("Claims");
+                });
+
+            modelBuilder.Entity("InsuranceAPI.Models.InsuranceClaim", b =>
+                {
+                    b.Navigation("Documents");
+                });
+
             modelBuilder.Entity("InsuranceAPI.Models.Proposal", b =>
                 {
+                    b.Navigation("Documents");
+
+                    b.Navigation("Insurance");
+
                     b.Navigation("InsuranceDetails");
+
+                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("InsuranceAPI.Models.User", b =>
@@ -380,6 +616,8 @@ namespace InsuranceAPI.Migrations
             modelBuilder.Entity("InsuranceAPI.Models.Vehicle", b =>
                 {
                     b.Navigation("InsuranceDetails");
+
+                    b.Navigation("Insurances");
 
                     b.Navigation("Proposals");
                 });

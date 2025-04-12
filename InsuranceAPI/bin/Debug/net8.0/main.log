@@ -1,0 +1,441 @@
+2025-04-10 09:12:43,209 [1] INFO Microsoft.Hosting.Lifetime - Now listening on: http://localhost:5084
+2025-04-10 09:12:43,271 [1] INFO Microsoft.Hosting.Lifetime - Application started. Press Ctrl+C to shut down.
+2025-04-10 09:12:43,274 [1] INFO Microsoft.Hosting.Lifetime - Hosting environment: Development
+2025-04-10 09:12:43,277 [1] INFO Microsoft.Hosting.Lifetime - Content root path: C:\Users\Asus\Desktop\Automobile_backend\InsuranceAPI
+2025-04-10 09:17:06,253 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (63ms) [Parameters=[@__id_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [u].[Username], [u].[HashKey], [u].[Password], [u].[Role]
+FROM [Users] AS [u]
+WHERE [u].[Username] = @__id_0
+2025-04-10 09:17:06,360 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [a].[Id], [a].[Email], [a].[Name]
+FROM [Admins] AS [a]
+2025-04-10 09:19:34,410 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (3ms) [Parameters=[@__id_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [u].[Username], [u].[HashKey], [u].[Password], [u].[Role]
+FROM [Users] AS [u]
+WHERE [u].[Username] = @__id_0
+2025-04-10 09:19:34,418 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [a].[Id], [a].[Email], [a].[Name]
+FROM [Admins] AS [a]
+2025-04-10 09:56:10,728 [1] INFO Microsoft.Hosting.Lifetime - Now listening on: http://localhost:5084
+2025-04-10 09:56:10,798 [1] INFO Microsoft.Hosting.Lifetime - Application started. Press Ctrl+C to shut down.
+2025-04-10 09:56:10,803 [1] INFO Microsoft.Hosting.Lifetime - Hosting environment: Development
+2025-04-10 09:56:10,805 [1] INFO Microsoft.Hosting.Lifetime - Content root path: C:\Users\Asus\Desktop\Automobile_backend\InsuranceAPI
+2025-04-10 11:50:50,042 [1] INFO Microsoft.Hosting.Lifetime - Now listening on: http://localhost:5084
+2025-04-10 11:50:50,152 [1] INFO Microsoft.Hosting.Lifetime - Application started. Press Ctrl+C to shut down.
+2025-04-10 11:50:50,155 [1] INFO Microsoft.Hosting.Lifetime - Hosting environment: Development
+2025-04-10 11:50:50,156 [1] INFO Microsoft.Hosting.Lifetime - Content root path: C:\Users\Asus\Desktop\Automobile_backend\InsuranceAPI
+2025-04-10 11:52:07,622 [1] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (14ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2025-04-10 11:52:07,652 [1] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (13ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-04-10 11:52:07,654 [1] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2025-04-10 11:52:07,655 [1] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-04-10 11:52:07,676 [1] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (11ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-04-10 11:52:07,691 [1] INFO Microsoft.EntityFrameworkCore.Migrations - Applying migration '20250410062153_Documents'.
+2025-04-10 11:52:07,804 [1] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (59ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Documents] (
+    [DocumentId] int NOT NULL IDENTITY,
+    [FileName] nvarchar(max) NOT NULL,
+    [FileType] nvarchar(max) NOT NULL,
+    [Data] varbinary(max) NOT NULL,
+    [ProposalId] int NOT NULL,
+    CONSTRAINT [PK_Documents] PRIMARY KEY ([DocumentId]),
+    CONSTRAINT [FK_Documents_Proposals_ProposalId] FOREIGN KEY ([ProposalId]) REFERENCES [Proposals] ([ProposalId]) ON DELETE CASCADE
+);
+2025-04-10 11:52:07,811 [1] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Documents_ProposalId] ON [Documents] ([ProposalId]);
+2025-04-10 11:52:07,831 [1] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (20ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20250410062153_Documents', N'8.0.14');
+2025-04-10 11:52:20,324 [1] INFO Microsoft.Hosting.Lifetime - Now listening on: http://localhost:5084
+2025-04-10 11:52:20,387 [1] INFO Microsoft.Hosting.Lifetime - Application started. Press Ctrl+C to shut down.
+2025-04-10 11:52:20,390 [1] INFO Microsoft.Hosting.Lifetime - Hosting environment: Development
+2025-04-10 11:52:20,398 [1] INFO Microsoft.Hosting.Lifetime - Content root path: C:\Users\Asus\Desktop\Automobile_backend\InsuranceAPI
+2025-04-10 11:52:59,247 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (59ms) [Parameters=[@p0='?' (Size = 450), @p1='?' (Size = 8000) (DbType = Binary), @p2='?' (Size = 8000) (DbType = Binary), @p3='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Users] ([Username], [HashKey], [Password], [Role])
+VALUES (@p0, @p1, @p2, @p3);
+2025-04-10 11:52:59,377 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (19ms) [Parameters=[@p0='?' (Size = 12), @p1='?' (Size = 4000), @p2='?' (DbType = Date), @p3='?' (Size = 450), @p4='?' (Size = 4000), @p5='?' (Size = 4000), @p6='?' (Size = 10), @p7='?' (Size = 15)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Clients] ([AadhaarNumber], [Address], [DateOfBirth], [Email], [Gender], [Name], [PANNumber], [PhoneNumber])
+OUTPUT INSERTED.[Id]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+2025-04-10 11:54:23,881 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (5ms) [Parameters=[@__id_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [u].[Username], [u].[HashKey], [u].[Password], [u].[Role]
+FROM [Users] AS [u]
+WHERE [u].[Username] = @__id_0
+2025-04-10 11:54:23,961 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Clients] AS [c]
+2025-04-10 11:54:24,012 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [c].[Id], [c].[AadhaarNumber], [c].[Address], [c].[DateOfBirth], [c].[Email], [c].[Gender], [c].[Name], [c].[PANNumber], [c].[PhoneNumber], [u].[Username], [u].[HashKey], [u].[Password], [u].[Role]
+FROM [Clients] AS [c]
+INNER JOIN [Users] AS [u] ON [c].[Email] = [u].[Username]
+2025-04-10 11:56:59,857 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (29ms) [Parameters=[@p0='?' (Size = -1) (DbType = Binary), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Documents] ([Data], [FileName], [FileType], [ProposalId])
+OUTPUT INSERTED.[DocumentId]
+VALUES (@p0, @p1, @p2, @p3);
+2025-04-10 11:56:59,877 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (11ms) [Parameters=[@p0='?' (Size = -1) (DbType = Binary), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Documents] ([Data], [FileName], [FileType], [ProposalId])
+OUTPUT INSERTED.[DocumentId]
+VALUES (@p0, @p1, @p2, @p3);
+2025-04-10 11:56:59,913 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (30ms) [Parameters=[@p0='?' (Size = -1) (DbType = Binary), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Documents] ([Data], [FileName], [FileType], [ProposalId])
+OUTPUT INSERTED.[DocumentId]
+VALUES (@p0, @p1, @p2, @p3);
+2025-04-10 12:23:05,174 [1] INFO Microsoft.Hosting.Lifetime - Now listening on: http://localhost:5084
+2025-04-10 12:23:05,292 [1] INFO Microsoft.Hosting.Lifetime - Application started. Press Ctrl+C to shut down.
+2025-04-10 12:23:05,294 [1] INFO Microsoft.Hosting.Lifetime - Hosting environment: Development
+2025-04-10 12:23:05,297 [1] INFO Microsoft.Hosting.Lifetime - Content root path: C:\Users\Asus\Desktop\Automobile_backend\InsuranceAPI
+2025-04-10 12:33:21,869 [1] INFO Microsoft.Hosting.Lifetime - Now listening on: http://localhost:5084
+2025-04-10 12:33:22,252 [1] INFO Microsoft.Hosting.Lifetime - Application started. Press Ctrl+C to shut down.
+2025-04-10 12:33:22,298 [1] INFO Microsoft.Hosting.Lifetime - Hosting environment: Development
+2025-04-10 12:33:22,301 [1] INFO Microsoft.Hosting.Lifetime - Content root path: C:\Users\Asus\Desktop\Automobile_backend\InsuranceAPI
+2025-04-10 12:38:49,000 [1] INFO Microsoft.Hosting.Lifetime - Now listening on: http://localhost:5084
+2025-04-10 12:38:49,090 [1] INFO Microsoft.Hosting.Lifetime - Application started. Press Ctrl+C to shut down.
+2025-04-10 12:38:49,093 [1] INFO Microsoft.Hosting.Lifetime - Hosting environment: Development
+2025-04-10 12:38:49,095 [1] INFO Microsoft.Hosting.Lifetime - Content root path: C:\Users\Asus\Desktop\Automobile_backend\InsuranceAPI
+2025-04-10 12:56:13,588 [1] INFO Microsoft.Hosting.Lifetime - Now listening on: http://localhost:5084
+2025-04-10 12:56:13,677 [1] INFO Microsoft.Hosting.Lifetime - Application started. Press Ctrl+C to shut down.
+2025-04-10 12:56:13,682 [1] INFO Microsoft.Hosting.Lifetime - Hosting environment: Development
+2025-04-10 12:56:13,690 [1] INFO Microsoft.Hosting.Lifetime - Content root path: C:\Users\Asus\Desktop\Automobile_backend\InsuranceAPI
+2025-04-10 13:01:44,329 [.NET TP Worker] INFO InsuranceAPI.Services.ProposalService - Starting proposal submission process.
+2025-04-10 13:01:44,333 [.NET TP Worker] INFO InsuranceAPI.Services.ProposalService - Creating vehicle for ClientId: 2
+2025-04-10 13:01:45,824 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (72ms) [Parameters=[@p0='?' (Size = 50), @p1='?' (DbType = Int32), @p2='?' (Size = 50), @p3='?' (Size = 50), @p4='?' (Size = 100), @p5='?' (Size = 100), @p6='?' (DbType = Date), @p7='?' (DbType = Int32), @p8='?' (Size = 50), @p9='?' (Size = 20), @p10='?' (Size = 20)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Vehicles] ([ChassisNumber], [ClientId], [EngineNumber], [FuelType], [MakerName], [ModelName], [RegistrationDate], [SeatCapacity], [VehicleColor], [VehicleNumber], [VehicleType])
+OUTPUT INSERTED.[VehicleId]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10);
+2025-04-10 13:01:45,878 [.NET TP Worker] INFO InsuranceAPI.Services.ProposalService - Vehicle created with ID: 2
+2025-04-10 13:01:45,930 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (8ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = DateTime2), @p2='?' (DbType = Date), @p3='?' (Size = 50), @p4='?' (DbType = Date), @p5='?' (Size = 20), @p6='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Proposals] ([ClientId], [CreatedAt], [FitnessValidUpto], [InsuranceType], [InsuranceValidUpto], [Status], [VehicleId])
+OUTPUT INSERTED.[ProposalId]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6);
+2025-04-10 13:01:45,935 [.NET TP Worker] INFO InsuranceAPI.Services.ProposalService - Proposal created with ID: 2
+2025-04-10 13:01:45,939 [.NET TP Worker] INFO InsuranceAPI.Services.ProposalService - Calculated premium: 46000.00
+2025-04-10 13:01:45,985 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (11ms) [Parameters=[@p0='?' (Precision = 18) (Scale = 2) (DbType = Decimal), @p1='?' (Size = 50), @p2='?' (DbType = Date), @p3='?' (Precision = 18) (Scale = 2) (DbType = Decimal), @p4='?' (Size = 50), @p5='?' (Size = 20), @p6='?' (DbType = Int32), @p7='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [InsuranceDetails] ([CalculatedPremium], [DamageInsurance], [InsuranceStartDate], [InsuranceSum], [LiabilityOption], [Plan], [ProposalId], [VehicleId])
+OUTPUT INSERTED.[Id]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+2025-04-10 13:01:45,990 [.NET TP Worker] INFO InsuranceAPI.Services.ProposalService - Insurance details saved for ProposalId: 2
+2025-04-10 13:01:46,063 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (19ms) [Parameters=[@p0='?' (Size = -1) (DbType = Binary), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Documents] ([Data], [FileName], [FileType], [ProposalId])
+OUTPUT INSERTED.[DocumentId]
+VALUES (@p0, @p1, @p2, @p3);
+2025-04-10 13:01:46,074 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (4ms) [Parameters=[@p0='?' (Size = -1) (DbType = Binary), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Documents] ([Data], [FileName], [FileType], [ProposalId])
+OUTPUT INSERTED.[DocumentId]
+VALUES (@p0, @p1, @p2, @p3);
+2025-04-10 13:01:46,104 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (27ms) [Parameters=[@p0='?' (Size = -1) (DbType = Binary), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Documents] ([Data], [FileName], [FileType], [ProposalId])
+OUTPUT INSERTED.[DocumentId]
+VALUES (@p0, @p1, @p2, @p3);
+2025-04-10 13:01:46,107 [.NET TP Worker] INFO InsuranceAPI.Services.ProposalService - Documents saved successfully for ProposalId: 2
+2025-04-10 13:01:46,109 [.NET TP Worker] INFO InsuranceAPI.Services.ProposalService - Proposal submission completed for ProposalId: 2
+2025-04-10 15:26:51,858 [1] INFO Microsoft.Hosting.Lifetime - Now listening on: http://localhost:5084
+2025-04-10 15:26:51,980 [1] INFO Microsoft.Hosting.Lifetime - Application started. Press Ctrl+C to shut down.
+2025-04-10 15:26:51,984 [1] INFO Microsoft.Hosting.Lifetime - Hosting environment: Development
+2025-04-10 15:26:51,994 [1] INFO Microsoft.Hosting.Lifetime - Content root path: C:\Users\Asus\Desktop\Automobile_backend\InsuranceAPI
+2025-04-10 15:30:57,911 [1] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (15ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2025-04-10 15:30:57,939 [1] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (13ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-04-10 15:30:57,941 [1] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2025-04-10 15:30:57,942 [1] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-04-10 15:30:57,973 [1] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (18ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-04-10 15:30:57,988 [1] INFO Microsoft.EntityFrameworkCore.Migrations - Applying migration '20250410100043_InsuranceClaim'.
+2025-04-10 15:30:58,093 [1] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (23ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [Documents] ADD [ClaimId] int NULL;
+2025-04-10 15:30:58,112 [1] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (18ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [InsuranceClaims] (
+    [ClaimId] int NOT NULL IDENTITY,
+    [InsurancePolicyNumber] nvarchar(450) NOT NULL,
+    [IncidentDate] datetime2 NOT NULL,
+    [Description] nvarchar(1000) NOT NULL,
+    [Status] nvarchar(50) NOT NULL DEFAULT N'Pending',
+    [CreatedAt] datetime2 NOT NULL DEFAULT (GETUTCDATE()),
+    CONSTRAINT [PK_InsuranceClaims] PRIMARY KEY ([ClaimId]),
+    CONSTRAINT [FK_InsuranceClaims_Insurances_InsurancePolicyNumber] FOREIGN KEY ([InsurancePolicyNumber]) REFERENCES [Insurances] ([InsurancePolicyNumber]) ON DELETE NO ACTION
+);
+2025-04-10 15:30:58,129 [1] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (17ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Documents_ClaimId] ON [Documents] ([ClaimId]);
+2025-04-10 15:30:58,131 [1] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_InsuranceClaims_InsurancePolicyNumber] ON [InsuranceClaims] ([InsurancePolicyNumber]);
+2025-04-10 15:30:58,141 [1] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (10ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [Documents] ADD CONSTRAINT [FK_Documents_InsuranceClaims_ClaimId] FOREIGN KEY ([ClaimId]) REFERENCES [InsuranceClaims] ([ClaimId]) ON DELETE CASCADE;
+2025-04-10 15:30:58,145 [1] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20250410100043_InsuranceClaim', N'8.0.14');
+2025-04-10 15:31:07,892 [1] INFO Microsoft.Hosting.Lifetime - Now listening on: http://localhost:5084
+2025-04-10 15:31:07,995 [1] INFO Microsoft.Hosting.Lifetime - Application started. Press Ctrl+C to shut down.
+2025-04-10 15:31:07,998 [1] INFO Microsoft.Hosting.Lifetime - Hosting environment: Development
+2025-04-10 15:31:08,006 [1] INFO Microsoft.Hosting.Lifetime - Content root path: C:\Users\Asus\Desktop\Automobile_backend\InsuranceAPI
+2025-04-10 15:31:51,142 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (54ms) [Parameters=[@p0='?' (Size = 450), @p1='?' (Size = 8000) (DbType = Binary), @p2='?' (Size = 8000) (DbType = Binary), @p3='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Users] ([Username], [HashKey], [Password], [Role])
+VALUES (@p0, @p1, @p2, @p3);
+2025-04-10 15:31:51,252 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (12ms) [Parameters=[@p0='?' (Size = 12), @p1='?' (Size = 4000), @p2='?' (DbType = Date), @p3='?' (Size = 450), @p4='?' (Size = 4000), @p5='?' (Size = 4000), @p6='?' (Size = 10), @p7='?' (Size = 15)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Clients] ([AadhaarNumber], [Address], [DateOfBirth], [Email], [Gender], [Name], [PANNumber], [PhoneNumber])
+OUTPUT INSERTED.[Id]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+2025-04-10 15:32:14,103 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (2ms) [Parameters=[@__id_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [u].[Username], [u].[HashKey], [u].[Password], [u].[Role]
+FROM [Users] AS [u]
+WHERE [u].[Username] = @__id_0
+2025-04-10 15:32:14,175 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Clients] AS [c]
+2025-04-10 15:32:14,226 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [c].[Id], [c].[AadhaarNumber], [c].[Address], [c].[DateOfBirth], [c].[Email], [c].[Gender], [c].[Name], [c].[PANNumber], [c].[PhoneNumber], [u].[Username], [u].[HashKey], [u].[Password], [u].[Role]
+FROM [Clients] AS [c]
+INNER JOIN [Users] AS [u] ON [c].[Email] = [u].[Username]
+2025-04-10 15:36:04,340 [.NET TP Worker] INFO InsuranceAPI.Services.ProposalService - Starting proposal submission process.
+2025-04-10 15:36:04,343 [.NET TP Worker] INFO InsuranceAPI.Services.ProposalService - Creating vehicle for ClientId: 3
+2025-04-10 15:36:04,410 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (9ms) [Parameters=[@p0='?' (Size = 50), @p1='?' (DbType = Int32), @p2='?' (Size = 50), @p3='?' (Size = 50), @p4='?' (Size = 100), @p5='?' (Size = 100), @p6='?' (DbType = Date), @p7='?' (DbType = Int32), @p8='?' (Size = 50), @p9='?' (Size = 20), @p10='?' (Size = 20)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Vehicles] ([ChassisNumber], [ClientId], [EngineNumber], [FuelType], [MakerName], [ModelName], [RegistrationDate], [SeatCapacity], [VehicleColor], [VehicleNumber], [VehicleType])
+OUTPUT INSERTED.[VehicleId]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10);
+2025-04-10 15:36:04,475 [.NET TP Worker] ERROR Microsoft.EntityFrameworkCore.Update - An exception occurred in the database while saving changes for context type 'InsuranceAPI.Context.InsuranceManagementContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot insert duplicate key row in object 'dbo.Vehicles' with unique index 'IX_Vehicles_VehicleNumber'. The duplicate key value is (KA01AB1234).
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:b75931d3-4581-402f-bf8c-3067d8293fd6
+Error Number:2601,State:1,Class:14
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot insert duplicate key row in object 'dbo.Vehicles' with unique index 'IX_Vehicles_VehicleNumber'. The duplicate key value is (KA01AB1234).
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:b75931d3-4581-402f-bf8c-3067d8293fd6
+Error Number:2601,State:1,Class:14
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2025-04-10 15:49:32,906 [1] INFO Microsoft.Hosting.Lifetime - Now listening on: http://localhost:5084
+2025-04-10 15:49:33,193 [1] INFO Microsoft.Hosting.Lifetime - Application started. Press Ctrl+C to shut down.
+2025-04-10 15:49:33,205 [1] INFO Microsoft.Hosting.Lifetime - Hosting environment: Development
+2025-04-10 15:49:33,212 [1] INFO Microsoft.Hosting.Lifetime - Content root path: C:\Users\Asus\Desktop\Automobile_backend\InsuranceAPI
+2025-04-10 15:53:07,788 [.NET TP Worker] INFO InsuranceAPI.Services.ProposalService - Starting proposal submission process.
+2025-04-10 15:53:07,792 [.NET TP Worker] INFO InsuranceAPI.Services.ProposalService - Creating vehicle for ClientId: 3
+2025-04-10 15:53:09,017 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (50ms) [Parameters=[@p0='?' (Size = 50), @p1='?' (DbType = Int32), @p2='?' (Size = 50), @p3='?' (Size = 50), @p4='?' (Size = 100), @p5='?' (Size = 100), @p6='?' (DbType = Date), @p7='?' (DbType = Int32), @p8='?' (Size = 50), @p9='?' (Size = 20), @p10='?' (Size = 20)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Vehicles] ([ChassisNumber], [ClientId], [EngineNumber], [FuelType], [MakerName], [ModelName], [RegistrationDate], [SeatCapacity], [VehicleColor], [VehicleNumber], [VehicleType])
+OUTPUT INSERTED.[VehicleId]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10);
+2025-04-10 15:53:09,062 [.NET TP Worker] INFO InsuranceAPI.Services.ProposalService - Vehicle created with ID: 4
+2025-04-10 15:53:09,115 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (7ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = DateTime2), @p2='?' (DbType = Date), @p3='?' (Size = 50), @p4='?' (DbType = Date), @p5='?' (Size = 20), @p6='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Proposals] ([ClientId], [CreatedAt], [FitnessValidUpto], [InsuranceType], [InsuranceValidUpto], [Status], [VehicleId])
+OUTPUT INSERTED.[ProposalId]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6);
+2025-04-10 15:53:09,120 [.NET TP Worker] INFO InsuranceAPI.Services.ProposalService - Proposal created with ID: 3
+2025-04-10 15:53:09,125 [.NET TP Worker] INFO InsuranceAPI.Services.ProposalService - Calculated premium: 12000.00
+2025-04-10 15:53:09,184 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (11ms) [Parameters=[@p0='?' (Precision = 18) (Scale = 2) (DbType = Decimal), @p1='?' (Size = 50), @p2='?' (DbType = Date), @p3='?' (Precision = 18) (Scale = 2) (DbType = Decimal), @p4='?' (Size = 50), @p5='?' (Size = 20), @p6='?' (DbType = Int32), @p7='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [InsuranceDetails] ([CalculatedPremium], [DamageInsurance], [InsuranceStartDate], [InsuranceSum], [LiabilityOption], [Plan], [ProposalId], [VehicleId])
+OUTPUT INSERTED.[Id]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+2025-04-10 15:53:09,190 [.NET TP Worker] INFO InsuranceAPI.Services.ProposalService - Insurance details saved for ProposalId: 3
+2025-04-10 15:53:09,257 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (18ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (Size = -1) (DbType = Binary), @p2='?' (Size = 4000), @p3='?' (Size = 4000), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Documents] ([ClaimId], [Data], [FileName], [FileType], [ProposalId])
+OUTPUT INSERTED.[DocumentId]
+VALUES (@p0, @p1, @p2, @p3, @p4);
+2025-04-10 15:53:09,271 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (6ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (Size = -1) (DbType = Binary), @p2='?' (Size = 4000), @p3='?' (Size = 4000), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Documents] ([ClaimId], [Data], [FileName], [FileType], [ProposalId])
+OUTPUT INSERTED.[DocumentId]
+VALUES (@p0, @p1, @p2, @p3, @p4);
+2025-04-10 15:53:09,283 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (7ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (Size = -1) (DbType = Binary), @p2='?' (Size = 4000), @p3='?' (Size = 4000), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Documents] ([ClaimId], [Data], [FileName], [FileType], [ProposalId])
+OUTPUT INSERTED.[DocumentId]
+VALUES (@p0, @p1, @p2, @p3, @p4);
+2025-04-10 15:53:09,285 [.NET TP Worker] INFO InsuranceAPI.Services.ProposalService - Documents saved successfully for ProposalId: 3
+2025-04-10 15:53:09,289 [.NET TP Worker] INFO InsuranceAPI.Services.ProposalService - Proposal submission completed for ProposalId: 3
+2025-04-10 15:55:24,173 [1] INFO Microsoft.Hosting.Lifetime - Now listening on: http://localhost:5084
+2025-04-10 15:55:24,327 [1] INFO Microsoft.Hosting.Lifetime - Application started. Press Ctrl+C to shut down.
+2025-04-10 15:55:24,329 [1] INFO Microsoft.Hosting.Lifetime - Hosting environment: Development
+2025-04-10 15:55:24,332 [1] INFO Microsoft.Hosting.Lifetime - Content root path: C:\Users\Asus\Desktop\Automobile_backend\InsuranceAPI
+2025-04-10 15:56:12,777 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (45ms) [Parameters=[@__id_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [u].[Username], [u].[HashKey], [u].[Password], [u].[Role]
+FROM [Users] AS [u]
+WHERE [u].[Username] = @__id_0
+2025-04-10 15:56:12,916 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Clients] AS [c]
+2025-04-10 15:56:12,963 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [c].[Id], [c].[AadhaarNumber], [c].[Address], [c].[DateOfBirth], [c].[Email], [c].[Gender], [c].[Name], [c].[PANNumber], [c].[PhoneNumber], [u].[Username], [u].[HashKey], [u].[Password], [u].[Role]
+FROM [Clients] AS [c]
+INNER JOIN [Users] AS [u] ON [c].[Email] = [u].[Username]
+2025-04-10 15:56:58,951 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (9ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [d].[DocumentId], [d].[ClaimId], [d].[Data], [d].[FileName], [d].[FileType], [d].[ProposalId]
+FROM [Documents] AS [d]
+2025-04-10 15:59:43,137 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [d].[DocumentId], [d].[ClaimId], [d].[Data], [d].[FileName], [d].[FileType], [d].[ProposalId]
+FROM [Documents] AS [d]
+2025-04-10 16:00:06,231 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (10ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [d].[DocumentId], [d].[ClaimId], [d].[Data], [d].[FileName], [d].[FileType], [d].[ProposalId]
+FROM [Documents] AS [d]
+2025-04-10 16:01:24,091 [1] INFO Microsoft.Hosting.Lifetime - Now listening on: http://localhost:5084
+2025-04-10 16:01:24,234 [1] INFO Microsoft.Hosting.Lifetime - Application started. Press Ctrl+C to shut down.
+2025-04-10 16:01:24,238 [1] INFO Microsoft.Hosting.Lifetime - Hosting environment: Development
+2025-04-10 16:01:24,245 [1] INFO Microsoft.Hosting.Lifetime - Content root path: C:\Users\Asus\Desktop\Automobile_backend\InsuranceAPI
+2025-04-10 16:01:56,764 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (59ms) [Parameters=[@__id_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [u].[Username], [u].[HashKey], [u].[Password], [u].[Role]
+FROM [Users] AS [u]
+WHERE [u].[Username] = @__id_0
+2025-04-10 16:01:56,899 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Clients] AS [c]
+2025-04-10 16:01:56,952 [.NET TP Worker] INFO Microsoft.EntityFrameworkCore.Database.Command - Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [c].[Id], [c].[AadhaarNumber], [c].[Address], [c].[DateOfBirth], [c].[Email], [c].[Gender], [c].[Name], [c].[PANNumber], [c].[PhoneNumber], [u].[Username], [u].[HashKey], [u].[Password], [u].[Role]
+FROM [Clients] AS [c]
+INNER JOIN [Users] AS [u] ON [c].[Email] = [u].[Username]
+2025-04-10 16:05:11,933 [.NET TP Worker] ERROR Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware - An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Multiple constructors accepting all given argument types have been found in type 'InsuranceAPI.Controllers.ClaimController'. There should only be one applicable constructor.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.TryFindMatchingConstructor(Type instanceType, Type[] argumentTypes, ConstructorInfo& matchingConstructor, Nullable`1[]& parameterMap)
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.FindApplicableConstructor(Type instanceType, Type[] argumentTypes, ConstructorInfo& matchingConstructor, Nullable`1[]& matchingParameterMap)
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateFactoryInternal(Type instanceType, Type[] argumentTypes, ParameterExpression& provider, ParameterExpression& argumentArray, Expression& factoryExpressionBody)
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateFactory(Type instanceType, Type[] argumentTypes)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerActivatorProvider.CreateActivator(ControllerActionDescriptor descriptor)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.CreateControllerFactory(ControllerActionDescriptor descriptor)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvokerCache.GetCachedResult(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Routing.ControllerRequestDelegateFactory.<>c__DisplayClass12_0.<CreateRequestDelegate>b__0(HttpContext context)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-04-10 16:05:42,223 [.NET TP Worker] ERROR Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware - An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Multiple constructors accepting all given argument types have been found in type 'InsuranceAPI.Controllers.ClaimController'. There should only be one applicable constructor.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.TryFindMatchingConstructor(Type instanceType, Type[] argumentTypes, ConstructorInfo& matchingConstructor, Nullable`1[]& parameterMap)
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.FindApplicableConstructor(Type instanceType, Type[] argumentTypes, ConstructorInfo& matchingConstructor, Nullable`1[]& matchingParameterMap)
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateFactoryInternal(Type instanceType, Type[] argumentTypes, ParameterExpression& provider, ParameterExpression& argumentArray, Expression& factoryExpressionBody)
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateFactory(Type instanceType, Type[] argumentTypes)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerActivatorProvider.CreateActivator(ControllerActionDescriptor descriptor)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.CreateControllerFactory(ControllerActionDescriptor descriptor)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvokerCache.GetCachedResult(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Routing.ControllerRequestDelegateFactory.<>c__DisplayClass12_0.<CreateRequestDelegate>b__0(HttpContext context)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-04-10 16:05:45,525 [.NET TP Worker] ERROR Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware - An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Multiple constructors accepting all given argument types have been found in type 'InsuranceAPI.Controllers.ClaimController'. There should only be one applicable constructor.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.TryFindMatchingConstructor(Type instanceType, Type[] argumentTypes, ConstructorInfo& matchingConstructor, Nullable`1[]& parameterMap)
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.FindApplicableConstructor(Type instanceType, Type[] argumentTypes, ConstructorInfo& matchingConstructor, Nullable`1[]& matchingParameterMap)
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateFactoryInternal(Type instanceType, Type[] argumentTypes, ParameterExpression& provider, ParameterExpression& argumentArray, Expression& factoryExpressionBody)
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateFactory(Type instanceType, Type[] argumentTypes)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerActivatorProvider.CreateActivator(ControllerActionDescriptor descriptor)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.CreateControllerFactory(ControllerActionDescriptor descriptor)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvokerCache.GetCachedResult(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Routing.ControllerRequestDelegateFactory.<>c__DisplayClass12_0.<CreateRequestDelegate>b__0(HttpContext context)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-04-10 16:06:07,469 [.NET TP Worker] ERROR Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware - An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Multiple constructors accepting all given argument types have been found in type 'InsuranceAPI.Controllers.ClaimController'. There should only be one applicable constructor.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.TryFindMatchingConstructor(Type instanceType, Type[] argumentTypes, ConstructorInfo& matchingConstructor, Nullable`1[]& parameterMap)
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.FindApplicableConstructor(Type instanceType, Type[] argumentTypes, ConstructorInfo& matchingConstructor, Nullable`1[]& matchingParameterMap)
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateFactoryInternal(Type instanceType, Type[] argumentTypes, ParameterExpression& provider, ParameterExpression& argumentArray, Expression& factoryExpressionBody)
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateFactory(Type instanceType, Type[] argumentTypes)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerActivatorProvider.CreateActivator(ControllerActionDescriptor descriptor)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.CreateControllerFactory(ControllerActionDescriptor descriptor)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvokerCache.GetCachedResult(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Routing.ControllerRequestDelegateFactory.<>c__DisplayClass12_0.<CreateRequestDelegate>b__0(HttpContext context)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-04-10 16:49:34,280 [1] INFO Microsoft.Hosting.Lifetime - Now listening on: http://localhost:5084
+2025-04-10 16:49:34,527 [1] INFO Microsoft.Hosting.Lifetime - Application started. Press Ctrl+C to shut down.
+2025-04-10 16:49:34,554 [1] INFO Microsoft.Hosting.Lifetime - Hosting environment: Development
+2025-04-10 16:49:34,560 [1] INFO Microsoft.Hosting.Lifetime - Content root path: C:\Users\Asus\Desktop\Automobile_backend\InsuranceAPI
+2025-04-11 20:56:12,995 [1] INFO Microsoft.Hosting.Lifetime - Now listening on: http://localhost:5084
+2025-04-11 20:56:13,101 [1] INFO Microsoft.Hosting.Lifetime - Application started. Press Ctrl+C to shut down.
+2025-04-11 20:56:13,107 [1] INFO Microsoft.Hosting.Lifetime - Hosting environment: Development
+2025-04-11 20:56:13,142 [1] INFO Microsoft.Hosting.Lifetime - Content root path: C:\Users\Asus\Desktop\Automobile_backend\InsuranceAPI

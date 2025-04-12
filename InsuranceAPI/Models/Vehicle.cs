@@ -46,5 +46,7 @@ namespace InsuranceAPI.Models
 
         public IEnumerable<Proposal>? Proposals { get; set; }
         public IEnumerable<InsuranceDetails>? InsuranceDetails { get; set; }
+        public IEnumerable<Insurance>? Insurances { get; set; }
+
     }
 }

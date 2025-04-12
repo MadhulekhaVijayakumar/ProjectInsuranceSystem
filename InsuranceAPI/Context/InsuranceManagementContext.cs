@@ -13,7 +13,10 @@ namespace InsuranceAPI.Context
         public DbSet<Proposal> Proposals { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<InsuranceDetails> InsuranceDetails { get; set; }
-
+        public DbSet<Insurance> Insurances { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<Document> Documents { get; set; }
+        public DbSet<InsuranceClaim> InsuranceClaims { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // ---------------- USER RELATIONSHIPS ----------------
@@ -147,6 +150,90 @@ namespace InsuranceAPI.Context
                       .HasForeignKey(i => i.VehicleId)
                       .OnDelete(DeleteBehavior.Restrict);
             });
+
+            // ---------------- INSURANCE CONFIG ----------------
+            modelBuilder.Entity<Insurance>()
+                  .HasKey(i => i.InsurancePolicyNumber);
+
+            modelBuilder.Entity<Proposal>()
+                        .HasOne(p => p.Insurance)
+                        .WithOne(i => i.Proposal)
+                        .HasForeignKey<Insurance>(i => i.ProposalId);
+            modelBuilder.Entity<Insurance>()
+                        .HasOne(i => i.Client)
+                        .WithMany(c => c.Insurances)
+                        .HasForeignKey(i => i.ClientId);
+            modelBuilder.Entity<Insurance>()
+                            .HasOne(i => i.Vehicle)
+                            .WithMany(v => v.Insurances)
+                            .HasForeignKey(i => i.VehicleId);
+
+
+
+            modelBuilder.Entity<Insurance>()
+                   .Property(i => i.PremiumAmount)
+                   .HasPrecision(18, 2); // Or whatever you need
+            modelBuilder.Entity<Insurance>()
+                      .Property(i => i.InsuranceSum)
+                      .HasPrecision(18, 2);
+
+            //payment
+            modelBuilder.Entity<Payment>()
+                         .HasOne(p => p.Proposal)
+                         .WithMany(p => p.Payments)
+                         .HasForeignKey(p => p.ProposalId);
+
+            modelBuilder.Entity<Payment>()
+                .Property(p => p.AmountPaid)
+                .HasPrecision(10, 2);
+            //----Documents----
+            modelBuilder.Entity<Document>()
+           .HasOne(d => d.Proposal)
+           .WithMany(p => p.Documents)
+           .HasForeignKey(d => d.ProposalId)
+           .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Document>()
+                        .HasOne(d => d.Claim)
+                        .WithMany(c => c.Documents)
+                        .HasForeignKey(d => d.ClaimId)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            //InsuranceClaim
+            // ---- InsuranceClaim ----
+            modelBuilder.Entity<InsuranceClaim>()
+                .HasKey(c => c.ClaimId);
+
+            modelBuilder.Entity<InsuranceClaim>()
+                .Property(c => c.InsurancePolicyNumber)
+                .IsRequired();
+
+            modelBuilder.Entity<InsuranceClaim>()
+                .Property(c => c.Description)
+                .HasMaxLength(1000);
+
+            modelBuilder.Entity<InsuranceClaim>()
+                .Property(c => c.Status)
+                .HasMaxLength(50)
+                .HasDefaultValue("Pending");
+
+            modelBuilder.Entity<InsuranceClaim>()
+                .Property(c => c.CreatedAt)
+                .HasDefaultValueSql("GETUTCDATE()");
+
+            modelBuilder.Entity<InsuranceClaim>()
+                .HasOne(c => c.Insurance)
+                .WithMany(i => i.Claims)
+                .HasForeignKey(c => c.InsurancePolicyNumber)
+                .HasPrincipalKey(i => i.InsurancePolicyNumber)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<InsuranceClaim>()
+                .HasMany(c => c.Documents)
+                .WithOne(d => d.Claim)
+                .HasForeignKey(d => d.ClaimId)
+                .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

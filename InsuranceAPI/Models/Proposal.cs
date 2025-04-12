@@ -38,5 +38,10 @@ namespace InsuranceAPI.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public InsuranceDetails? InsuranceDetails { get; set; }
+        public Insurance? Insurance { get; set; }
+        public IEnumerable<Payment> Payments { get; set; } = new List<Payment>();
+        public ICollection<Document> Documents { get; set; }
+
+
     }
 }

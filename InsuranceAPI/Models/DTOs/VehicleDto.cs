@@ -3,7 +3,7 @@
     public class VehicleDto
     {
         public int VehicleId { get; set; }
-        public int ClientId { get; set; }
+       
         public string VechileType { get; set; }= string.Empty;
         public string VehicleNumber { get; set; } = string.Empty;
         public string ChassisNumber { get; set; } = string.Empty;
