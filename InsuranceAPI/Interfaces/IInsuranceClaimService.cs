@@ -1,14 +1,14 @@
-﻿using InsuranceAPI.Models.DTOs;
+﻿using InsuranceAPI.Models;
+using InsuranceAPI.Models.DTOs;
+using System.Security.Claims;
 
 namespace InsuranceAPI.Interfaces
 {
     public interface IInsuranceClaimService
     {
-        Task<CreateClaimResponse> SubmitClaimAsync(CreateClaimRequest request);
-        Task<IEnumerable<ClaimSummaryDto>> GetClaimsForClient(int clientId);
-        Task<IEnumerable<ClaimSummaryDto>> GetAllClaims(); // For admin
-        Task<bool> UpdateClaimStatus(int claimId, string status);
-
-
+        Task<CreateClaimResponse> SubmitClaimWithDocumentsAsync(CreateClaimRequest request, ClaimsPrincipal user);
+        Task<IEnumerable<InsuranceClaim>> GetClaimsByClientAsync(ClaimsPrincipal user);
+        Task<IEnumerable<InsuranceClaimDto>> GetAllClaimsForAdminAsync();
+        Task<InsuranceClaim> UpdateClaimStatusAsync(int claimId, string newStatus);
     }
 }

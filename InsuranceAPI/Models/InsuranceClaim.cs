@@ -1,4 +1,6 @@
-﻿namespace InsuranceAPI.Models
+﻿using System.Text.Json.Serialization;
+
+namespace InsuranceAPI.Models
 {
     public class InsuranceClaim
     {
@@ -8,7 +10,7 @@
         public string Description { get; set; } = string.Empty;
         public string Status { get; set; } = "Pending";
         public DateTime CreatedAt { get; set; }
-
+        [JsonIgnore]
         public Insurance? Insurance { get; set; }
         public ICollection<Document>? Documents { get; set; }
 

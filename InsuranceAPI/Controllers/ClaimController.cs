@@ -1,4 +1,5 @@
 ﻿using InsuranceAPI.Interfaces;
+using InsuranceAPI.Models;
 using InsuranceAPI.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,105 +7,67 @@ using System.Security.Claims;
 
 namespace InsuranceAPI.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    public class ClaimController : ControllerBase
+    [Route("api/[controller]")]
+    public class InsuranceClaimController : ControllerBase
     {
         private readonly IInsuranceClaimService _claimService;
-        private readonly IDocumentService _documentService;
-        private readonly ILogger<ClaimController> _logger;
 
-        public ClaimController(IInsuranceClaimService claimService, IDocumentService documentService, ILogger<ClaimController> logger)
+        public InsuranceClaimController(IInsuranceClaimService claimService)
         {
             _claimService = claimService;
-            _documentService = documentService;
-            _logger = logger;
         }
 
+        [Authorize(Roles = "Client")]
         [HttpPost("submit")]
-        [Authorize(Roles = "Client")]
-        public async Task<ActionResult<CreateClaimResponse>> SubmitClaim([FromForm] CreateClaimRequest request)
+        public async Task<ActionResult<CreateClaimResponse>> SubmitClaimWithDocuments([FromForm] CreateClaimRequest request)
         {
             try
             {
-                var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                if (string.IsNullOrEmpty(userId))
-                    return Unauthorized("Client ID not found.");
-
-                var response = await _claimService.SubmitClaimAsync(request);
-                _logger.LogInformation("Claim submitted with ClaimId: {ClaimId}", response.ClaimId);
-
-                if (request.Documents != null)
-                {
-                    request.Documents.ClaimId = response.ClaimId;
-                    await _documentService.SaveClaimDocumentsAsync(request.Documents);
-                }
-
-                return Ok(response);
+                var result = await _claimService.SubmitClaimWithDocumentsAsync(request, User);
+                return Ok(result);
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error submitting claim: {Error}", ex.Message);
-                return BadRequest($"Failed to submit claim: {ex.Message}");
+                return BadRequest(new CreateClaimResponse { Message = $"Error: {ex.Message}" });
             }
         }
-        public ClaimController(IInsuranceClaimService claimService, ILogger<ClaimController> logger)
-        {
-            _claimService = claimService;
-            _logger = logger;
-        }
 
-        // GET: api/Claim/client/5
-        [HttpGet("client/{clientId}")]
         [Authorize(Roles = "Client")]
-        public async Task<ActionResult<IEnumerable<ClaimSummaryDto>>> GetClaimsForClient(int clientId)
+        [HttpGet("my-claims")]
+        public async Task<ActionResult<IEnumerable<InsuranceClaim>>> GetMyClaims()
         {
             try
             {
-                var claims = await _claimService.GetClaimsForClient(clientId);
+                var claims = await _claimService.GetClaimsByClientAsync(User);
                 return Ok(claims);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error fetching client claims.");
-                return StatusCode(500, "Internal server error");
+                return BadRequest($"Error: {ex.Message}");
             }
         }
 
-        // GET: api/Claim/all
+        [Authorize(Roles = "Admin")]
         [HttpGet("all")]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<IEnumerable<ClaimSummaryDto>>> GetAllClaims()
+        public async Task<ActionResult<IEnumerable<InsuranceClaim>>> GetAllClaims()
         {
-            try
-            {
-                var claims = await _claimService.GetAllClaims();
-                return Ok(claims);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error fetching all claims.");
-                return StatusCode(500, "Internal server error");
-            }
+            var claims = await _claimService.GetAllClaimsForAdminAsync();
+            return Ok(claims);
         }
 
-        // PUT: api/Claim/status/5?status=Approved
-        [HttpPut("status/{claimId}")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> UpdateClaimStatus(int claimId, [FromQuery] string status)
+        [HttpPut("update-status/{claimId}")]
+        public async Task<ActionResult<InsuranceClaim>> UpdateClaimStatus(int claimId, [FromQuery] string newStatus)
         {
             try
             {
-                var updated = await _claimService.UpdateClaimStatus(claimId, status);
-                if (!updated)
-                    return NotFound($"Claim with ID {claimId} not found.");
-
-                return Ok($"Claim status updated to {status}");
+                var updatedClaim = await _claimService.UpdateClaimStatusAsync(claimId, newStatus);
+                return Ok(updatedClaim);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error updating claim status.");
-                return StatusCode(500, "Internal server error");
+                return BadRequest($"Error: {ex.Message}");
             }
         }
     }

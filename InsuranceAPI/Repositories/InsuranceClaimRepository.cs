@@ -32,19 +32,6 @@ namespace InsuranceAPI.Repositories
             return claims;
         }
 
-        public async Task<IEnumerable<InsuranceClaim>> GetClaimsForClient(int clientId)
-        {
-            return await _context.InsuranceClaims
-                .Include(c => c.Insurance)
-                .Where(c => c.Insurance.ClientId == clientId)
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<InsuranceClaim>> GetAllClaimsWithInsurance()
-        {
-            return await _context.InsuranceClaims
-                .Include(c => c.Insurance)
-                .ToListAsync();
-        }
+       
     }
 }

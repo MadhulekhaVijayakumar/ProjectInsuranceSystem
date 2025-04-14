@@ -2,7 +2,7 @@
 {
     public class ClaimDocumentUploadRequest
     {
-        public int ClaimId { get; set; }
+        //public int ClaimId { get; set; }
 
         public IFormFile? RepairEstimateCost { get; set; }
         public IFormFile? AccidentCopy { get; set; }

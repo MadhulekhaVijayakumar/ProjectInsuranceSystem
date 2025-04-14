@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace InsuranceAPI.Models
 {
@@ -27,6 +28,7 @@ namespace InsuranceAPI.Models
 
         public string Status { get; set; } = "active";
         public DateTime CreatedAt { get; set; }
+        [JsonIgnore]
         public ICollection<InsuranceClaim>? Claims { get; set; }
     }
 }

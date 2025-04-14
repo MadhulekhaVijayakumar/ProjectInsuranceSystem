@@ -1,100 +1,98 @@
-﻿using InsuranceAPI.Models;
+﻿using InsuranceAPI.Interfaces;
+using InsuranceAPI.Models;
 using InsuranceAPI.Models.DTOs;
 using InsuranceAPI.Repositories;
-using InsuranceAPI.Interfaces;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace InsuranceAPI.Services
 {
     public class InsuranceClaimService : IInsuranceClaimService
     {
-        private readonly InsuranceClaimRepository _claimRepository;
+        private readonly IRepository<int, InsuranceClaim> _claimRepository;
         private readonly IRepository<string, Insurance> _insuranceRepository;
-        private readonly ILogger<InsuranceClaimService> _logger;
+        private readonly IDocumentService _documentService;
 
         public InsuranceClaimService(
-            InsuranceClaimRepository claimRepository,
+            IRepository<int, InsuranceClaim> claimRepository,
             IRepository<string, Insurance> insuranceRepository,
-            ILogger<InsuranceClaimService> logger)
+            IDocumentService documentService)
         {
             _claimRepository = claimRepository;
             _insuranceRepository = insuranceRepository;
-            _logger = logger;
+            _documentService = documentService;
         }
 
-        public async Task<CreateClaimResponse> SubmitClaimAsync(CreateClaimRequest request)
+
+        public async Task<CreateClaimResponse> SubmitClaimWithDocumentsAsync(CreateClaimRequest request, ClaimsPrincipal user)
         {
-            try
+            var clientId = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(clientId))
+                throw new Exception("Invalid client information");
+
+            var insurance = await _insuranceRepository.GetById(request.InsurancePolicyNumber);
+            if (insurance == null || insurance.ClientId.ToString() != clientId)
+                throw new Exception("Invalid insurance policy for this client");
+
+            var claim = new InsuranceClaim
             {
-                var insurance = await _insuranceRepository.GetById(request.InsurancePolicyNumber);
-                if (insurance == null)
-                    throw new Exception("Invalid Insurance Policy Number.");
+                InsurancePolicyNumber = request.InsurancePolicyNumber,
+                IncidentDate = request.IncidentDate,
+                Description = request.Description,
+                CreatedAt = DateTime.UtcNow,
+                Status = "Pending"
+            };
 
-                var claim = new InsuranceClaim
-                {
-                    InsurancePolicyNumber = request.InsurancePolicyNumber,
-                    IncidentDate = request.IncidentDate,
-                    Description = request.Description,
-                    Status = "Pending",
-                    CreatedAt = DateTime.UtcNow
-                };
+            var savedClaim = await _claimRepository.Add(claim);
 
-                var createdClaim = await _claimRepository.Add(claim);
-
-                _logger.LogInformation("Claim submitted successfully with ClaimId: {ClaimId}", createdClaim.ClaimId);
-
-                return new CreateClaimResponse
-                {
-                    ClaimId = createdClaim.ClaimId,
-                    Status = createdClaim.Status,
-                    Message = "Claim submitted successfully"
-                };
-            }
-            catch (Exception ex)
+            if (request.Documents != null)
             {
-                _logger.LogError(ex, "Error occurred while submitting claim.");
-                throw;
+                await _documentService.SaveClaimDocumentsAsync(savedClaim.ClaimId, request.Documents);
             }
+
+
+            return new CreateClaimResponse
+            {
+                ClaimId = savedClaim.ClaimId,
+                Status = savedClaim.Status,
+                Message = "Claim submitted successfully"
+            };
         }
 
-        public async Task<IEnumerable<ClaimSummaryDto>> GetClaimsForClient(int clientId)
+        public async Task<IEnumerable<InsuranceClaim>> GetClaimsByClientAsync(ClaimsPrincipal user)
         {
-            var claims = await _claimRepository.GetClaimsForClient(clientId);
+            var clientId = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(clientId))
+                throw new Exception("Invalid client information");
 
-            return claims.Select(c => new ClaimSummaryDto
+            var allClaims = await _claimRepository.GetAll();
+            return allClaims.Where(c => c.Insurance != null && c.Insurance.ClientId.ToString() == clientId);
+        }
+
+        public async Task<IEnumerable<InsuranceClaimDto>> GetAllClaimsForAdminAsync()
+        {
+            var claims = await _claimRepository.GetAll();
+            return claims.Select(c => new InsuranceClaimDto
             {
                 ClaimId = c.ClaimId,
-                PolicyNumber = c.InsurancePolicyNumber,
-                IncidentDate = c.IncidentDate,
                 Status = c.Status,
-                Description = c.Description
+                Description = c.Description,
+                InsurancePolicyNumber = c.InsurancePolicyNumber
             });
         }
 
-        public async Task<IEnumerable<ClaimSummaryDto>> GetAllClaims()
-        {
-            var claims = await _claimRepository.GetAllClaimsWithInsurance();
 
-            return claims.Select(c => new ClaimSummaryDto
-            {
-                ClaimId = c.ClaimId,
-                PolicyNumber = c.InsurancePolicyNumber,
-                IncidentDate = c.IncidentDate,
-                Status = c.Status,
-                Description = c.Description
-            });
-        }
-
-        public async Task<bool> UpdateClaimStatus(int claimId, string status)
+        public async Task<InsuranceClaim> UpdateClaimStatusAsync(int claimId, string newStatus)
         {
             var claim = await _claimRepository.GetById(claimId);
             if (claim == null)
                 throw new Exception("Claim not found");
 
-            claim.Status = status;
-            await _claimRepository.Update(claimId, claim);
+            if (newStatus != "Approved" && newStatus != "Rejected")
+                throw new Exception("Invalid status value. Must be 'Approved' or 'Rejected'.");
 
-            return true;
+            claim.Status = newStatus;
+            return await _claimRepository.Update(claimId, claim);
         }
     }
 }

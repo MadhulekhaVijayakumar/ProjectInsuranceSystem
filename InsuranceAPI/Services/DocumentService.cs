@@ -80,7 +80,7 @@ namespace InsuranceAPI.Services
                 return (null, $"Error reading file {file.FileName}: {ex.Message}");
             }
         }
-        public async Task SaveClaimDocumentsAsync(ClaimDocumentUploadRequest request)
+        public async Task SaveClaimDocumentsAsync(int claimId, ClaimDocumentUploadRequest request)
         {
             var documents = new List<Document>();
             var validationErrors = new List<string>();
@@ -89,7 +89,7 @@ namespace InsuranceAPI.Services
             {
                 if (file != null)
                 {
-                    var result = await TryConvertToDocumentForClaimAsync(file, fileType, request.ClaimId);
+                    var result = await TryConvertClaimDocumentAsync(file, fileType, claimId);
                     if (result.Item1 != null)
                         documents.Add(result.Item1);
                     else
@@ -97,38 +97,37 @@ namespace InsuranceAPI.Services
                 }
             }
 
-            await AddIfValid(request.RepairEstimateCost, "Repair Estimate Cost");
-            await AddIfValid(request.AccidentCopy, "Accident Copy");
-            await AddIfValid(request.FIRCopy, "FIR Copy");
+            await AddIfValid(request.RepairEstimateCost, "RepairEstimateCost");
+            await AddIfValid(request.AccidentCopy, "AccidentCopy");
+            await AddIfValid(request.FIRCopy, "FIRCopy");
 
             if (validationErrors.Any())
             {
-                _logger.LogWarning("Claim document validation failed: {Errors}", string.Join(" | ", validationErrors));
-                throw new Exception("Claim document upload failed:\n" + string.Join("\n", validationErrors));
+                _logger.LogWarning("Claim document upload failed: {Errors}", string.Join(" | ", validationErrors));
+                throw new Exception("Document upload failed:\n" + string.Join("\n", validationErrors));
             }
 
             foreach (var doc in documents)
             {
                 await _documentRepository.Add(doc);
             }
-
-            _logger.LogInformation("Claim documents uploaded successfully for ClaimId: {ClaimId}", request.ClaimId);
         }
 
-        
-
-        private async Task<(Document?, string)> TryConvertToDocumentForClaimAsync(IFormFile file, string fileType, int claimId)
+        private async Task<(Document?, string)> TryConvertClaimDocumentAsync(IFormFile file, string fileType, int claimId)
         {
             var extension = Path.GetExtension(file.FileName).ToLower();
+
             if (!_allowedExtensions.Contains(extension))
-                return (null, $"Invalid file type {extension}. Only PDF, DOC, DOCX, JPG, PNG allowed.");
+                return (null, $"Invalid file extension {extension}. Allowed: {string.Join(", ", _allowedExtensions)}");
+
             if (file.Length > _maxFileSize)
-                return (null, $"File {file.FileName} exceeds 5MB size limit.");
+                return (null, $"File {file.FileName} exceeds the 5MB limit.");
 
             try
             {
                 using var ms = new MemoryStream();
                 await file.CopyToAsync(ms);
+
                 return (new Document
                 {
                     FileName = file.FileName,
@@ -139,9 +138,11 @@ namespace InsuranceAPI.Services
             }
             catch (Exception ex)
             {
-                return (null, $"Error reading file {file.FileName}: {ex.Message}");
+                return (null, $"Error processing {file.FileName}: {ex.Message}");
             }
         }
+
+
         public async Task<(byte[] FileData, string FileName)?> DownloadClaimDocumentAsync(int claimId, string fileType)
         {
             var allDocuments = await _documentRepository.GetAll();

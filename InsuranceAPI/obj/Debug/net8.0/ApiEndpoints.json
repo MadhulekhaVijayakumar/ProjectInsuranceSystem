@@ -52,129 +52,6 @@
     ]
   },
   {
-    "ContainingType": "InsuranceAPI.Controllers.ClaimController",
-    "Method": "GetAllClaims",
-    "RelativePath": "api/Claim/all",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[InsuranceAPI.Models.DTOs.ClaimSummaryDto, InsuranceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "InsuranceAPI.Controllers.ClaimController",
-    "Method": "GetClaimsForClient",
-    "RelativePath": "api/Claim/client/{clientId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "clientId",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[InsuranceAPI.Models.DTOs.ClaimSummaryDto, InsuranceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "InsuranceAPI.Controllers.ClaimController",
-    "Method": "UpdateClaimStatus",
-    "RelativePath": "api/Claim/status/{claimId}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "claimId",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "status",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "InsuranceAPI.Controllers.ClaimController",
-    "Method": "SubmitClaim",
-    "RelativePath": "api/Claim/submit",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "InsurancePolicyNumber",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "IncidentDate",
-        "Type": "System.DateTime",
-        "IsRequired": false
-      },
-      {
-        "Name": "Description",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "Documents.ClaimId",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "Documents.RepairEstimateCost",
-        "Type": "Microsoft.AspNetCore.Http.IFormFile",
-        "IsRequired": false
-      },
-      {
-        "Name": "Documents.AccidentCopy",
-        "Type": "Microsoft.AspNetCore.Http.IFormFile",
-        "IsRequired": false
-      },
-      {
-        "Name": "Documents.FIRCopy",
-        "Type": "Microsoft.AspNetCore.Http.IFormFile",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "InsuranceAPI.Models.DTOs.CreateClaimResponse",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
     "ContainingType": "InsuranceAPI.Controllers.ClientController",
     "Method": "CreateClient",
     "RelativePath": "api/Client",
@@ -377,6 +254,128 @@
     "ReturnTypes": [
       {
         "Type": "System.Collections.Generic.IEnumerable\u00601[[InsuranceAPI.Models.DTOs.ClientPolicyStatusDto, InsuranceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "InsuranceAPI.Controllers.InsuranceClaimController",
+    "Method": "GetAllClaims",
+    "RelativePath": "api/InsuranceClaim/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[InsuranceAPI.Models.InsuranceClaim, InsuranceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "InsuranceAPI.Controllers.InsuranceClaimController",
+    "Method": "GetMyClaims",
+    "RelativePath": "api/InsuranceClaim/my-claims",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[InsuranceAPI.Models.InsuranceClaim, InsuranceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "InsuranceAPI.Controllers.InsuranceClaimController",
+    "Method": "SubmitClaimWithDocuments",
+    "RelativePath": "api/InsuranceClaim/submit",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "InsurancePolicyNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "IncidentDate",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Documents.RepairEstimateCost",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "Documents.AccidentCopy",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "Documents.FIRCopy",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "InsuranceAPI.Models.DTOs.CreateClaimResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "InsuranceAPI.Controllers.InsuranceClaimController",
+    "Method": "UpdateClaimStatus",
+    "RelativePath": "api/InsuranceClaim/update-status/{claimId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "claimId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "newStatus",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "InsuranceAPI.Models.InsuranceClaim",
         "MediaTypes": [
           "text/plain",
           "application/json",

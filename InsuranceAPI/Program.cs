@@ -84,7 +84,7 @@ namespace InsuranceAPI
             builder.Services.AddScoped<IRepository<string, Insurance>, InsuranceRepository>();
             builder.Services.AddScoped<IRepository<int,Payment>,PaymentRepository>();
             builder.Services.AddScoped<IRepository<int, Document>, DocumentRepository>();
-            builder.Services.AddScoped<InsuranceClaimRepository>();
+            builder.Services.AddScoped<IRepository<int, InsuranceClaim>, InsuranceClaimRepository>();
 
 
 
