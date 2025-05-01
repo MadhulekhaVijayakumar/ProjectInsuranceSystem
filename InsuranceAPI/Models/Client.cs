@@ -34,7 +34,7 @@ public class Client
     public User? User { get; set; }
     public ICollection<Vehicle>? Vehicles { get; set; }
     public ICollection<Proposal>? Proposals { get; set; }
-    public IEnumerable<Insurance> Insurances { get; set; }
+    public IEnumerable<Insurance>? Insurances { get; set; }
 
 
 }

@@ -1,5 +1,6 @@
 ﻿using InsuranceAPI.Interfaces;
 using InsuranceAPI.Models.DTOs;
+using InsuranceAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,20 +14,30 @@ namespace InsuranceAPI.Controllers
     public class InsuranceController : ControllerBase
     {
         private readonly IInsuranceService _insuranceService;
+        private readonly IPolicyDocumentService _policyDocumentService;
 
-        public InsuranceController(IInsuranceService insuranceService)
+        public InsuranceController(IInsuranceService insuranceService, IPolicyDocumentService policyDocumentService)
         {
             _insuranceService = insuranceService;
+            _policyDocumentService = policyDocumentService;
         }
         [Authorize(Roles = "Admin")]
-        [HttpPost("generate/{proposalId}")]
+        [HttpPost("Admin/GenerateInsurance/{proposalId}")]
         public async Task<ActionResult<InsuranceResponse>> GenerateInsurance(int proposalId)
         {
-            var insurance = await _insuranceService.GenerateInsuranceAsync(proposalId);
-            return Ok(insurance);
+            try
+            {
+                var insurance = await _insuranceService.GenerateInsuranceAsync(proposalId);
+                return Ok(insurance);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
+            
         [Authorize(Roles = "Admin")]
-        [HttpPost("generate-quote/{proposalId}")]
+        [HttpPost("Admin/Generatequote/{proposalId}")]
         public async Task<ActionResult<InsuranceQuoteResponse>> GenerateQuote(int proposalId)
         {
             try
@@ -41,7 +52,7 @@ namespace InsuranceAPI.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("by-proposal/{proposalId}")]
+        [HttpGet("Admin/Getbyproposal/{proposalId}")]
         public async Task<ActionResult<InsuranceResponse>> GetInsuranceByProposal(int proposalId)
         {
             var insurance = await _insuranceService.GetInsuranceByProposalIdAsync(proposalId);
@@ -49,7 +60,7 @@ namespace InsuranceAPI.Controllers
         }
 
         [Authorize(Roles = "Client")]
-        [HttpGet("track")]
+        [HttpGet("Client/TrackStatus")]
         public async Task<ActionResult<IEnumerable<ClientPolicyStatusDto>>> TrackMyPolicies()
         {
             var clientIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
@@ -66,7 +77,18 @@ namespace InsuranceAPI.Controllers
 
             return Ok(result);
         }
+        [HttpGet("Client/Download-policy/{insurancePolicyNumber}")]
+        [Authorize(Roles = "Client")]
+        public async Task<IActionResult> DownloadPolicyDocument(string insurancePolicyNumber)
+        {
+            var insurance = await _insuranceService.GetInsuranceWithDetailsAsync(insurancePolicyNumber);
+            if (insurance == null || insurance.Status != "active")
+                return NotFound("Insurance policy not found or not active.");
 
+            var pdfBytes = _policyDocumentService.GeneratePolicyDocument(insurance);
+
+            return File(pdfBytes, "application/pdf", $"Policy_{insurancePolicyNumber}.pdf");
+        }
 
 
 

@@ -14,12 +14,13 @@ namespace InsuranceAPI.Services
             {
                 _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Keys:JwtToken"]));
             }
-            public async Task<string> GenerateToken(int id, string name,string role)
+            public async Task<string> GenerateToken(int id, string name,string role,string email)
             {
                 List<Claim> claims = new List<Claim>()
                 {
                     new Claim(ClaimTypes.NameIdentifier, id.ToString()),
                     new Claim(ClaimTypes.Name, name),
+                     new Claim(ClaimTypes.Email, email),
                     new Claim(ClaimTypes.Role, role)
 
                 };

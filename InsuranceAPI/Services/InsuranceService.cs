@@ -160,6 +160,15 @@ namespace InsuranceAPI.Services
             return result;
         }
 
+        public async Task<Insurance> GetInsuranceWithDetailsAsync(string policyNumber)
+        {
+            return await _context.Insurances
+                .Include(i => i.Client)
+                .Include(i => i.Vehicle)
+                .Include(i => i.Proposal)
+                
+                .FirstOrDefaultAsync(i => i.InsurancePolicyNumber == policyNumber);
+        }
 
 
     }

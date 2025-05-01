@@ -17,48 +17,62 @@ namespace InsuranceAPI.Services
             _context = context;
             _logger = logger;
         }
-        public async Task<PaymentResponse> MakePayment(CreatePaymentRequest request)
+        public async Task<object> ProcessPaymentAsync(CreatePaymentRequest request)
         {
             try
             {
-                // Step 1: Create a new Payment object with the details from the request
+                var existingPayment = await _context.Payments
+                    .FirstOrDefaultAsync(p => p.ProposalId == request.ProposalId && p.TransactionStatus == "success");
+
+                if (existingPayment != null)
+                {
+                    _logger.LogInformation($"ℹ️ Payment already exists for ProposalId: {request.ProposalId}");
+                    return new { Message = "Payment has already been made for this proposal." };
+                }
+
                 var payment = new Payment
                 {
                     ProposalId = request.ProposalId,
                     AmountPaid = request.AmountPaid,
                     PaymentDate = DateTime.Now,
                     PaymentMode = request.PaymentMode,
-                    TransactionStatus = "success" // Set transaction status to success
+                    TransactionStatus = "success"
                 };
 
-                // Step 2: Add the payment to the Payments table
                 _context.Payments.Add(payment);
-                await _context.SaveChangesAsync(); // Save the changes in the database
+                await _context.SaveChangesAsync();
 
-                // Step 3: Get the generated PaymentId (since it's an identity column, it is auto-generated)
-                var paymentId = payment.PaymentId;
+                var proposal = await _context.Proposals
+                    .FirstOrDefaultAsync(p => p.ProposalId == request.ProposalId);
 
-                // Log the payment success
-                _logger.LogInformation($"✅ Payment successful. ID: {paymentId}, ProposalId: {request.ProposalId}");
+                if (proposal != null)
+                {
+                    proposal.Status = "payment successful";
+                    await _context.SaveChangesAsync();
+                }
 
-                // Step 4: Return the response object with payment details
+                _logger.LogInformation($"✅ Payment successful. PaymentId: {payment.PaymentId}");
+
                 return new PaymentResponse
                 {
-                    PaymentId = paymentId,
-                    ProposalId = request.ProposalId,
-                    AmountPaid = request.AmountPaid,
+                    PaymentId = payment.PaymentId,
+                    ProposalId = payment.ProposalId,
+                    AmountPaid = payment.AmountPaid,
                     PaymentDate = payment.PaymentDate,
-                    PaymentMode = request.PaymentMode,
-                    TransactionStatus = "success"
+                    PaymentMode = payment.PaymentMode,
+                    TransactionStatus = payment.TransactionStatus
                 };
             }
             catch (Exception ex)
             {
-                // Log the error if payment fails
                 _logger.LogError($"❌ Payment failed for ProposalId: {request.ProposalId} - {ex.Message}");
                 throw new Exception("An unexpected error occurred during payment processing.", ex);
             }
         }
+
+
+
+
 
     }
 

@@ -9,6 +9,7 @@ namespace InsuranceAPI.Interfaces
         Task<InsuranceResponse> GetInsuranceByProposalIdAsync(int proposalId);
         Task<IEnumerable<ClientPolicyStatusDto>> GetClientPolicyStatusAsync(int clientId);
         Task<InsuranceQuoteResponse> GenerateQuote(int proposalId);
+        Task<Insurance> GetInsuranceWithDetailsAsync(string policyNumber);
     }
 
 }

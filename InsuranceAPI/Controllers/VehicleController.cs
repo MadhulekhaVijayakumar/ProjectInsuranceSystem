@@ -20,7 +20,7 @@ namespace InsuranceAPI.Controllers
 
 
 
-        [HttpGet("my")]
+        [HttpGet("Client/GetVehicle")]
         public async Task<ActionResult<IEnumerable<VehicleDto>>> GetMyVehicles()
         {
             var clientIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

@@ -4,6 +4,6 @@ namespace InsuranceAPI.Interfaces
 {
     public interface IPaymentService
     {
-        Task<PaymentResponse> MakePayment(CreatePaymentRequest request);
+        Task<object> ProcessPaymentAsync(CreatePaymentRequest request);
     }
 }

@@ -20,7 +20,7 @@ namespace InsuranceAPI.Controllers
         }
 
         //for sign up purpose
-        [HttpPost]
+        [HttpPost("Register")]
 
         public async Task<ActionResult<CreateClientResponse>> CreateClient(CreateClientRequest request)
         {
@@ -35,7 +35,7 @@ namespace InsuranceAPI.Controllers
             }
         }
 
-        [HttpGet("profile")]
+        [HttpGet("Profile")]
         [Authorize(Roles = "Client")]
         public async Task<ActionResult<ClientProfileResponse>> GetProfile()
         {
@@ -46,7 +46,7 @@ namespace InsuranceAPI.Controllers
             return Ok(result);
         }
 
-        [HttpPut("update-profile")]
+        [HttpPut("Update-profile")]
         [Authorize(Roles = "Client")]
         public async Task<ActionResult<ClientProfileResponse>> UpdateProfile([FromBody] UpdateClientRequest request)
         {
@@ -67,7 +67,33 @@ namespace InsuranceAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-    
+        [Authorize(Roles = "Client")]
+        [HttpPost("Change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
+        {
+            try
+            {
+                // Extract the email (used as username) from the JWT
+                var email = User.FindFirstValue(ClaimTypes.Email); // or ClaimTypes.Email based on your JWT claims
+
+                if (string.IsNullOrEmpty(email))
+                    return Unauthorized("Invalid token or email not found.");
+
+                var result = await _clientService.ChangeClientPassword(email, request.OldPassword, request.NewPassword);
+
+                if (!result)
+                    return BadRequest("Password change failed.");
+
+                return Ok("Password changed successfully.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+
+
 
 
     }

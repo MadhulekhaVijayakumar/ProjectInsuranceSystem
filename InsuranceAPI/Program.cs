@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using QuestPDF.Infrastructure;
 using System.Security.Claims;
 using System.Text;
 
@@ -61,7 +62,7 @@ namespace InsuranceAPI
                 options.AddPolicy("AllowAll",
                     builder =>
                     {
-                        builder.AllowAnyOrigin()
+                        builder.WithOrigins("http://localhost:5173")
                                .AllowAnyMethod()
                                .AllowAnyHeader();
                     });
@@ -106,6 +107,10 @@ namespace InsuranceAPI
             builder.Services.AddScoped<IDocumentService, DocumentService>();
             builder.Services.AddScoped<IInsuranceClaimService, InsuranceClaimService>();
             builder.Services.AddScoped<InsurancePolicyNumberGenerator>();
+            builder.Services.AddScoped<IPolicyDocumentService, PolicyDocumentService>();
+            builder.Services.AddScoped<IAdminDashboardService, AdminDashboardService>();
+
+
 
             #endregion
 
@@ -124,6 +129,8 @@ namespace InsuranceAPI
                     };
                 });
             #endregion
+            QuestPDF.Settings.License = LicenseType.Community;
+
 
             var app = builder.Build();
 
@@ -133,6 +140,7 @@ namespace InsuranceAPI
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseCors("AllowAll");
 
             app.UseAuthentication();
 

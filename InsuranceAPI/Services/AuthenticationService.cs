@@ -38,6 +38,7 @@ namespace InsuranceAPI.Services
 
             string name = "";
             int id = 0;
+            string email = "";
 
             if (user.Role == "Client")
             {
@@ -46,6 +47,7 @@ namespace InsuranceAPI.Services
                     throw new UnauthorizedAccessException("Client not found");
                 name = client.Name;
                 id = client.Id;
+                email=client.Email;
             }
             else if (user.Role == "Admin")
             {
@@ -55,13 +57,14 @@ namespace InsuranceAPI.Services
                     throw new UnauthorizedAccessException("Admin not found");
                 name = admin.Name;
                 id = admin.Id;
+                email = admin.Email;
             }
             else
             {
                 throw new UnauthorizedAccessException("Invalid role");
             }
 
-            var token = await _tokenService.GenerateToken(id, name, user.Role);
+            var token = await _tokenService.GenerateToken(id, name, user.Role,email);
             return new LoginResponse { Id = id, Name = name, Role = user.Role, Token = token };
         }
 

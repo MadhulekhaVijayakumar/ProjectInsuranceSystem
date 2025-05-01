@@ -13,6 +13,8 @@ namespace InsuranceAPI.Repositories
             var proposal = await _context.Proposals
                 .Include(p => p.Client)
                 .Include(p => p.Vehicle)
+                .Include(p => p.InsuranceDetails)
+                .Include(p => p.Documents)
                 .FirstOrDefaultAsync(p => p.ProposalId == key);
 
             if (proposal == null)
@@ -26,6 +28,8 @@ namespace InsuranceAPI.Repositories
             var proposals = await _context.Proposals
                 .Include(p => p.Client)
                 .Include(p => p.Vehicle)
+                .Include(p => p.InsuranceDetails)
+                .Include(p => p.Documents)
                 .ToListAsync();
 
             if (proposals.Count == 0)

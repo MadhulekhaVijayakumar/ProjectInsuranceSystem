@@ -113,6 +113,51 @@ namespace InsuranceAPI.Services
             return _mapper.Map<ClientProfileResponse>(updatedClient);
         }
 
+        public async Task<IEnumerable<ClientProfileResponse>> GetAllClients()
+        {
+            var clients = await _clientRepository.GetAll();
+            return clients.Select(_mapper.Map<ClientProfileResponse>);
+        }
+
+        public async Task<IEnumerable<ClientProfileResponse>> SearchClients(string keyword)
+        {
+            var clients = await _clientRepository.GetAll();
+            var filtered = clients
+                .Where(c =>
+                    (!string.IsNullOrEmpty(c.Name) && c.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase)) ||
+                    (!string.IsNullOrEmpty(c.Email) && c.Email.Contains(keyword, StringComparison.OrdinalIgnoreCase)) ||
+                    (!string.IsNullOrEmpty(c.PhoneNumber) && c.PhoneNumber.Contains(keyword)))
+                .ToList();
+            return filtered.Select(_mapper.Map<ClientProfileResponse>);
+        }
+
+        public async Task<bool> ChangeClientPassword(string email, string oldPassword, string newPassword)
+        {
+            var user = await _userRepository.GetById(email);
+            if (user == null)
+                throw new Exception("User not found");
+
+            // Verify old password
+            using (var hmacOld = new HMACSHA512(user.HashKey))
+            {
+                var computedOld = hmacOld.ComputeHash(Encoding.UTF8.GetBytes(oldPassword));
+                if (!computedOld.SequenceEqual(user.Password))
+                    throw new Exception("Old password is incorrect");
+            }
+
+            // Generate new hash key and hash
+            using (var hmacNew = new HMACSHA512())
+            {
+                user.HashKey = hmacNew.Key;
+                user.Password = hmacNew.ComputeHash(Encoding.UTF8.GetBytes(newPassword));
+            }
+
+            await _userRepository.Update(user.Username, user);
+            return true;
+        }
+       
+        
+
 
 
     }

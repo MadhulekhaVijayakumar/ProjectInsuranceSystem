@@ -19,7 +19,7 @@ namespace InsuranceAPI.Controllers
         }
 
         [Authorize(Roles = "Client")]
-        [HttpPost("submit")]
+        [HttpPost("Client/SubmitClaim")]
         public async Task<ActionResult<CreateClaimResponse>> SubmitClaimWithDocuments([FromForm] CreateClaimRequest request)
         {
             try
@@ -34,7 +34,7 @@ namespace InsuranceAPI.Controllers
         }
 
         [Authorize(Roles = "Client")]
-        [HttpGet("my-claims")]
+        [HttpGet("Client/MyClaims")]
         public async Task<ActionResult<IEnumerable<InsuranceClaim>>> GetMyClaims()
         {
             try
@@ -49,7 +49,7 @@ namespace InsuranceAPI.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("all")]
+        [HttpGet("Admin/AllClaim")]
         public async Task<ActionResult<IEnumerable<InsuranceClaim>>> GetAllClaims()
         {
             var claims = await _claimService.GetAllClaimsForAdminAsync();
@@ -57,7 +57,7 @@ namespace InsuranceAPI.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("update-status/{claimId}")]
+        [HttpPut("Admin/UpdateStatus/{claimId}")]
         public async Task<ActionResult<InsuranceClaim>> UpdateClaimStatus(int claimId, [FromQuery] string newStatus)
         {
             try
