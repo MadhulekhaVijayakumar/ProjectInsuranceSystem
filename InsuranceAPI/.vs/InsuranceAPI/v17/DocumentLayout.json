@@ -3,7 +3,7 @@
   "WorkspaceRootPath": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceAPI\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F8CBCFAF-DE2A-4BA3-88A6-29777F692DD3}|..\\InsuranceTest\\InsuranceTest.csproj|c:\\users\\asus\\desktop\\automobile_backend\\insurancetest\\clientservicetest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F8CBCFAF-DE2A-4BA3-88A6-29777F692DD3}|..\\InsuranceTest\\InsuranceTest.csproj|c:\\users\\asus\\desktop\\automobile_backend\\insurancetest\\documentrepositorytests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,14 +18,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ClientServiceTest.cs",
-              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceTest\\ClientServiceTest.cs",
-              "RelativeDocumentMoniker": "..\\InsuranceTest\\ClientServiceTest.cs",
-              "ToolTip": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceTest\\ClientServiceTest.cs",
-              "RelativeToolTip": "..\\InsuranceTest\\ClientServiceTest.cs",
-              "ViewState": "AgIAALUAAAAAAAAAAAAYwNQAAAAAAAAAAAAAAA==",
+              "Title": "DocumentRepositoryTests.cs",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceTest\\DocumentRepositoryTests.cs",
+              "RelativeDocumentMoniker": "..\\InsuranceTest\\DocumentRepositoryTests.cs",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceTest\\DocumentRepositoryTests.cs",
+              "RelativeToolTip": "..\\InsuranceTest\\DocumentRepositoryTests.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEQAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-05T11:46:12.578Z",
+              "WhenOpened": "2025-05-05T21:15:34.72Z",
               "EditorCaption": ""
             },
             {

@@ -10,7 +10,8 @@ using NUnit.Framework;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace InsuranceAPITests.Services
+namespace InsuranceTest
+
 {
     [TestFixture]
     public class ClientServiceTests
@@ -25,7 +26,7 @@ namespace InsuranceAPITests.Services
         public void Setup()
         {
             var options = new DbContextOptionsBuilder<InsuranceManagementContext>()
-                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // fresh DB per test run
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
             _context = new InsuranceManagementContext(options);
@@ -59,8 +60,11 @@ namespace InsuranceAPITests.Services
 
             var result = await _clientService.CreateClient(request);
 
-            Assert.That(result, Is.Not.Null);
-            Assert.That(result.Id, Is.GreaterThan(0));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Is.Not.Null);
+                Assert.That(result.Id, Is.GreaterThan(0));
+            });
         }
 
         [Test]
@@ -82,8 +86,11 @@ namespace InsuranceAPITests.Services
             var created = await _clientService.CreateClient(request);
             var profile = await _clientService.GetClientProfile(created.Id);
 
-            Assert.That(profile.Name, Is.EqualTo("Bob Smith"));
-            Assert.That(profile.Email, Is.EqualTo("bob@example.com"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(profile.Name, Is.EqualTo("Bob Smith"));
+                Assert.That(profile.Email, Is.EqualTo("bob@example.com"));
+            });
         }
 
         [Test]
@@ -112,8 +119,11 @@ namespace InsuranceAPITests.Services
 
             var updated = await _clientService.UpdateClientProfile(created.Id, updateRequest);
 
-            Assert.That(updated.Name, Is.EqualTo("Charles Brown"));
-            Assert.That(updated.PhoneNumber, Is.EqualTo("9111000000"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(updated.Name, Is.EqualTo("Charles Brown"));
+                Assert.That(updated.PhoneNumber, Is.EqualTo("9111000000"));
+            });
         }
 
         [Test]
@@ -142,7 +152,6 @@ namespace InsuranceAPITests.Services
         [Test]
         public async Task GetAllClients_ShouldReturnPaginatedClients()
         {
-            // Add multiple clients
             for (int i = 0; i < 5; i++)
             {
                 await _clientService.CreateClient(new CreateClientRequest
@@ -159,11 +168,14 @@ namespace InsuranceAPITests.Services
                 });
             }
 
-            var pagedResult = await _clientService.GetAllClients(1, 3); // Page 1, 3 items
+            var pagedResult = await _clientService.GetAllClients(1, 3);
 
-            Assert.That(pagedResult.Data.Count, Is.EqualTo(3));
-            Assert.That(pagedResult.TotalRecords, Is.EqualTo(5));
-            Assert.That(pagedResult.CurrentPage, Is.EqualTo(1));
+            Assert.Multiple(() =>
+            {
+                Assert.That(pagedResult.Data, Has.Count.EqualTo(3));
+                Assert.That(pagedResult.TotalRecords, Is.EqualTo(5));
+                Assert.That(pagedResult.CurrentPage, Is.EqualTo(1));
+            });
         }
 
         [Test]
@@ -184,9 +196,14 @@ namespace InsuranceAPITests.Services
 
             var matches = await _clientService.SearchClients("Eva");
 
-            Assert.That(matches.Any(), Is.True);
-            Assert.That(matches.First().Email, Is.EqualTo("eva@example.com"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(matches, Is.Not.Null);
+                Assert.That(matches, Is.Not.Empty);
+                Assert.That(matches.First().Email, Is.EqualTo("eva@example.com"));
+            });
         }
+
         [Test]
         public void ChangeClientPassword_ShouldFailWithIncorrectOldPassword()
         {
@@ -216,6 +233,5 @@ namespace InsuranceAPITests.Services
         {
             _context.Dispose();
         }
-
     }
 }

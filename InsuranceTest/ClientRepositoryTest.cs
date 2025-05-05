@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Text;
 
-namespace InsuranceAPI.Tests.Repositories
+namespace InsuranceTest
 {
     public class ClientRepositoryTests
     {

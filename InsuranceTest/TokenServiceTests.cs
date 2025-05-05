@@ -4,7 +4,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace InsuranceAPI.Tests
+namespace InsuranceTest
 {
     public class TokenServiceTests
     {
@@ -13,11 +13,12 @@ namespace InsuranceAPI.Tests
         [SetUp]
         public void Setup()
         {
-            var inMemorySettings = new Dictionary<string, string> {
-                {"Keys:JwtToken", "this_is_a_very_secure_key_1234567890"}
+            var inMemorySettings = new Dictionary<string, string>
+            {
+                {"Keys:JwtToken", "This is a secret key for jwt token generation. This long is enough??"}
             };
 
-            IConfiguration configuration = new ConfigurationBuilder()
+            var configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(inMemorySettings)
                 .Build();
 
@@ -25,20 +26,21 @@ namespace InsuranceAPI.Tests
         }
 
         [Test]
-        public async Task GenerateToken_ValidData_ReturnsToken()
+        public async Task GenerateToken_ShouldReturn_ValidJwtToken()
         {
             // Arrange
             int id = 1;
-            string name = "Karthi";
-            string role = "Client";
+            string name = "Test User";
+            string role = "Admin";
+            string email = "test@example.com";
 
             // Act
-            var token = await _tokenService.GenerateToken(id, name, role);
+            var token = await _tokenService.GenerateToken(id, name, role, email);
 
             // Assert
             Assert.IsNotNull(token);
             Assert.IsNotEmpty(token);
-            TestContext.WriteLine($"Generated Token: {token}");
+            Assert.That(token.Split('.').Length, Is.EqualTo(3), "Token is not in JWT format.");
         }
     }
 }
