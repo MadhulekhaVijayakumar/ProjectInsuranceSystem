@@ -109,8 +109,9 @@ namespace InsuranceAPI
             builder.Services.AddScoped<InsurancePolicyNumberGenerator>();
             builder.Services.AddScoped<IPolicyDocumentService, PolicyDocumentService>();
             builder.Services.AddScoped<IAdminDashboardService, AdminDashboardService>();
-
-
+            builder.Services.AddScoped<IActivityLogService, ActivityLogService>();
+            builder.Services.AddScoped<IQuotePdfGenerator, QuotePdfGenerator>();
+            builder.Services.AddScoped<IQuoteService, QuoteService>();
 
             #endregion
 

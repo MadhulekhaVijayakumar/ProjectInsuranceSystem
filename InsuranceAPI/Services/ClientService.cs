@@ -113,11 +113,29 @@ namespace InsuranceAPI.Services
             return _mapper.Map<ClientProfileResponse>(updatedClient);
         }
 
-        public async Task<IEnumerable<ClientProfileResponse>> GetAllClients()
+        public async Task<PaginatedResult<ClientProfileResponse>> GetAllClients(int pageNumber, int pageSize)
         {
-            var clients = await _clientRepository.GetAll();
-            return clients.Select(_mapper.Map<ClientProfileResponse>);
+            var clients = await _clientRepository.GetAll(); // Ideally optimized for large data
+
+            var totalRecords = clients.Count();
+
+            var pagedClients = clients
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var result = new PaginatedResult<ClientProfileResponse>
+            {
+                Data = pagedClients.Select(_mapper.Map<ClientProfileResponse>).ToList(),
+                TotalRecords = totalRecords,
+                CurrentPage = pageNumber,
+                PageSize = pageSize
+            };
+
+            return result;
         }
+
+
 
         public async Task<IEnumerable<ClientProfileResponse>> SearchClients(string keyword)
         {

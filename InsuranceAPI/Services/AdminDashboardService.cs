@@ -22,7 +22,7 @@ namespace InsuranceAPI.Services
                 .CountAsync(p => p.Status == "submitted");
 
             var claimsToReview = await _context.InsuranceClaims
-                .CountAsync(c => c.Status == "submitted");
+                .CountAsync(c => c.Status == "pending");
 
             var totalRevenue = await _context.Payments
                 .SumAsync(p => (decimal?)p.AmountPaid) ?? 0;

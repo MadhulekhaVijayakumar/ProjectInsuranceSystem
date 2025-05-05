@@ -1,23 +1,13 @@
 [
   {
-    "ContainingType": "InsuranceAPI.Controllers.AdminController",
-    "Method": "GetAllClients",
-    "RelativePath": "api/Admin/GetAllClients",
+    "ContainingType": "InsuranceAPI.Controllers.ActivityController",
+    "Method": "GetRecentActivities",
+    "RelativePath": "api/Activity/activities/recent",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[InsuranceAPI.Models.DTOs.ClientProfileResponse, InsuranceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
     "ContainingType": "InsuranceAPI.Controllers.AdminController",
@@ -106,6 +96,27 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "InsuranceAPI.Controllers.ClientController",
+    "Method": "GetAllClients",
+    "RelativePath": "api/Client/AllClient",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "pageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "InsuranceAPI.Controllers.ClientController",
@@ -239,6 +250,27 @@
   },
   {
     "ContainingType": "InsuranceAPI.Controllers.InsuranceController",
+    "Method": "GetAllInsurancesForAdmin",
+    "RelativePath": "api/Insurance/admin/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "InsuranceAPI.Controllers.InsuranceController",
     "Method": "GenerateInsurance",
     "RelativePath": "api/Insurance/Admin/GenerateInsurance/{proposalId}",
     "HttpMethod": "POST",
@@ -291,21 +323,15 @@
   },
   {
     "ContainingType": "InsuranceAPI.Controllers.InsuranceController",
-    "Method": "GetInsuranceByProposal",
-    "RelativePath": "api/Insurance/Admin/Getbyproposal/{proposalId}",
+    "Method": "GetPaidProposals",
+    "RelativePath": "api/Insurance/Admin/GetPaidProposal",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "proposalId",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "InsuranceAPI.Models.DTOs.InsuranceResponse",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[InsuranceAPI.Models.DTOs.ProposalReviewDto, InsuranceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -333,23 +359,39 @@
   },
   {
     "ContainingType": "InsuranceAPI.Controllers.InsuranceController",
+    "Method": "GetInsuranceByProposalIdForClient",
+    "RelativePath": "api/Insurance/client/proposal/{proposalId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "proposalId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "InsuranceAPI.Controllers.InsuranceController",
     "Method": "TrackMyPolicies",
     "RelativePath": "api/Insurance/Client/TrackStatus",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[InsuranceAPI.Models.DTOs.ClientPolicyStatusDto, InsuranceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "InsuranceAPI.Controllers.InsuranceController",
+    "Method": "GetAllInsurancesForClient",
+    "RelativePath": "api/Insurance/Client/ViewPolicy",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "InsuranceAPI.Controllers.InsuranceClaimController",
@@ -358,10 +400,21 @@
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "pageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[InsuranceAPI.Models.InsuranceClaim, InsuranceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "InsuranceAPI.Models.DTOs.PaginatedResult\u00601[[InsuranceAPI.Models.DTOs.InsuranceClaimDto, InsuranceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -393,6 +446,26 @@
     "ReturnTypes": [
       {
         "Type": "InsuranceAPI.Models.InsuranceClaim",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "InsuranceAPI.Controllers.InsuranceClaimController",
+    "Method": "GetAllApprovedClaims",
+    "RelativePath": "api/InsuranceClaim/approved",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[InsuranceAPI.Models.DTOs.PendingClaimDto, InsuranceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -446,6 +519,11 @@
         "IsRequired": false
       },
       {
+        "Name": "ClaimAmount",
+        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
         "Name": "Documents.RepairEstimateCost",
         "Type": "Microsoft.AspNetCore.Http.IFormFile",
         "IsRequired": false
@@ -472,6 +550,83 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "InsuranceAPI.Controllers.InsuranceClaimController",
+    "Method": "DownloadClaimDocument",
+    "RelativePath": "api/InsuranceClaim/download/{claimId}/{fileType}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "claimId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "fileType",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "InsuranceAPI.Controllers.InsuranceClaimController",
+    "Method": "GetAllPendingClaims",
+    "RelativePath": "api/InsuranceClaim/pending",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[InsuranceAPI.Models.DTOs.PendingClaimDto, InsuranceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "InsuranceAPI.Controllers.InsuranceClaimController",
+    "Method": "GetClaimDetailsForReview",
+    "RelativePath": "api/InsuranceClaim/review/{claimId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "claimId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "InsuranceAPI.Models.DTOs.ClaimReviewDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "InsuranceAPI.Controllers.InsuranceClaimController",
+    "Method": "SetApprovedClaimsToSettled",
+    "RelativePath": "api/InsuranceClaim/settle-approved",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "InsuranceAPI.Controllers.PaymentController",
@@ -703,7 +858,7 @@
       },
       {
         "Name": "Proposal.InsuranceValidUpto",
-        "Type": "System.DateTime",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       },
       {
@@ -768,6 +923,22 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "InsuranceAPI.Controllers.QuoteController",
+    "Method": "DownloadQuote",
+    "RelativePath": "api/Quote/download-quote/{proposalId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "proposalId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "InsuranceAPI.Controllers.VehicleController",

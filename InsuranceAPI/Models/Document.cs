@@ -9,7 +9,7 @@ namespace InsuranceAPI.Models
         public string FileType { get; set; } = string.Empty;// "License", "RC Book", etc.
         public byte[] Data { get; set; }
 
-        public int ProposalId { get; set; }
+        public int? ProposalId { get; set; }
         public Proposal? Proposal { get; set; }
         public int? ClaimId { get; set; }
         public InsuranceClaim? Claim { get; set; }

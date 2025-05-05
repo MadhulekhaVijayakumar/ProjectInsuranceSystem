@@ -45,13 +45,7 @@ namespace InsuranceAPI.Controllers
             var results = await _clientService.SearchClients(keyword);
             return Ok(results);
         }
-        [Authorize(Roles = "Admin")]
-        [HttpGet("GetAllClients")]
-        public async Task<ActionResult<IEnumerable<ClientProfileResponse>>> GetAllClients()
-        {
-            var clients = await _clientService.GetAllClients();
-            return Ok(clients);
-        }
+       
 
 
     }

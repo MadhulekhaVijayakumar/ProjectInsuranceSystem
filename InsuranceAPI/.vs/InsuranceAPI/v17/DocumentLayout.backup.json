@@ -3,36 +3,7 @@
   "WorkspaceRootPath": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceAPI\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{CD9D4E49-3388-4EA1-9A2C-B7A4136C2F3B}|InsuranceAPI.csproj|c:\\users\\asus\\desktop\\automobile_backend\\insuranceapi\\services\\paymentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CD9D4E49-3388-4EA1-9A2C-B7A4136C2F3B}|InsuranceAPI.csproj|solutionrelative:services\\paymentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CD9D4E49-3388-4EA1-9A2C-B7A4136C2F3B}|InsuranceAPI.csproj|c:\\users\\asus\\desktop\\automobile_backend\\insuranceapi\\controllers\\paymentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CD9D4E49-3388-4EA1-9A2C-B7A4136C2F3B}|InsuranceAPI.csproj|solutionrelative:controllers\\paymentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CD9D4E49-3388-4EA1-9A2C-B7A4136C2F3B}|InsuranceAPI.csproj|c:\\users\\asus\\desktop\\automobile_backend\\insuranceapi\\interfaces\\ipaymentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CD9D4E49-3388-4EA1-9A2C-B7A4136C2F3B}|InsuranceAPI.csproj|solutionrelative:interfaces\\ipaymentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CD9D4E49-3388-4EA1-9A2C-B7A4136C2F3B}|InsuranceAPI.csproj|c:\\users\\asus\\desktop\\automobile_backend\\insuranceapi\\controllers\\insurancecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CD9D4E49-3388-4EA1-9A2C-B7A4136C2F3B}|InsuranceAPI.csproj|solutionrelative:controllers\\insurancecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CD9D4E49-3388-4EA1-9A2C-B7A4136C2F3B}|InsuranceAPI.csproj|c:\\users\\asus\\desktop\\automobile_backend\\insuranceapi\\models\\dtos\\paymentstatusdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CD9D4E49-3388-4EA1-9A2C-B7A4136C2F3B}|InsuranceAPI.csproj|solutionrelative:models\\dtos\\paymentstatusdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CD9D4E49-3388-4EA1-9A2C-B7A4136C2F3B}|InsuranceAPI.csproj|c:\\users\\asus\\desktop\\automobile_backend\\insuranceapi\\controllers\\clientcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CD9D4E49-3388-4EA1-9A2C-B7A4136C2F3B}|InsuranceAPI.csproj|solutionrelative:controllers\\clientcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CD9D4E49-3388-4EA1-9A2C-B7A4136C2F3B}|InsuranceAPI.csproj|c:\\users\\asus\\desktop\\automobile_backend\\insuranceapi\\services\\insuranceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CD9D4E49-3388-4EA1-9A2C-B7A4136C2F3B}|InsuranceAPI.csproj|solutionrelative:services\\insuranceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CD9D4E49-3388-4EA1-9A2C-B7A4136C2F3B}|InsuranceAPI.csproj|c:\\users\\asus\\desktop\\automobile_backend\\insuranceapi\\controllers\\proposalcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CD9D4E49-3388-4EA1-9A2C-B7A4136C2F3B}|InsuranceAPI.csproj|solutionrelative:controllers\\proposalcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F8CBCFAF-DE2A-4BA3-88A6-29777F692DD3}|..\\InsuranceTest\\InsuranceTest.csproj|c:\\users\\asus\\desktop\\automobile_backend\\insurancetest\\clientservicetest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,106 +13,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "IPaymentService.cs",
-              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceAPI\\Interfaces\\IPaymentService.cs",
-              "RelativeDocumentMoniker": "Interfaces\\IPaymentService.cs",
-              "ToolTip": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceAPI\\Interfaces\\IPaymentService.cs",
-              "RelativeToolTip": "Interfaces\\IPaymentService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-30T09:22:45.836Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ClientController.cs",
-              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceAPI\\Controllers\\ClientController.cs",
-              "RelativeDocumentMoniker": "Controllers\\ClientController.cs",
-              "ToolTip": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceAPI\\Controllers\\ClientController.cs",
-              "RelativeToolTip": "Controllers\\ClientController.cs",
-              "ViewState": "AgIAABgAAAAAAAAAAAA1wB4AAAANAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-30T09:09:21.666Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "InsuranceController.cs",
-              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceAPI\\Controllers\\InsuranceController.cs",
-              "RelativeDocumentMoniker": "Controllers\\InsuranceController.cs",
-              "ToolTip": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceAPI\\Controllers\\InsuranceController.cs",
-              "RelativeToolTip": "Controllers\\InsuranceController.cs",
-              "ViewState": "AgIAAA4AAAAAAAAAAAAAwBcAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-30T09:03:12.467Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "PaymentService.cs",
-              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceAPI\\Services\\PaymentService.cs",
-              "RelativeDocumentMoniker": "Services\\PaymentService.cs",
-              "ToolTip": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceAPI\\Services\\PaymentService.cs",
-              "RelativeToolTip": "Services\\PaymentService.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAAwEIAAAANAAAAAAAAAA==",
+              "Title": "ClientServiceTest.cs",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceTest\\ClientServiceTest.cs",
+              "RelativeDocumentMoniker": "..\\InsuranceTest\\ClientServiceTest.cs",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceTest\\ClientServiceTest.cs",
+              "RelativeToolTip": "..\\InsuranceTest\\ClientServiceTest.cs",
+              "ViewState": "AgIAALUAAAAAAAAAAAAYwNQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-30T06:59:21.409Z",
+              "WhenOpened": "2025-05-05T11:46:12.578Z",
               "EditorCaption": ""
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "PaymentStatusDto.cs",
-              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceAPI\\Models\\DTOs\\PaymentStatusDto.cs",
-              "RelativeDocumentMoniker": "Models\\DTOs\\PaymentStatusDto.cs",
-              "ToolTip": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceAPI\\Models\\DTOs\\PaymentStatusDto.cs",
-              "RelativeToolTip": "Models\\DTOs\\PaymentStatusDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAxAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-30T09:42:08.783Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "PaymentController.cs",
-              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceAPI\\Controllers\\PaymentController.cs",
-              "RelativeDocumentMoniker": "Controllers\\PaymentController.cs",
-              "ToolTip": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceAPI\\Controllers\\PaymentController.cs",
-              "RelativeToolTip": "Controllers\\PaymentController.cs",
-              "ViewState": "AgIAABoAAAAAAAAAAAAQwCsAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-30T04:22:53.138Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "ProposalController.cs",
-              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceAPI\\Controllers\\ProposalController.cs",
-              "RelativeDocumentMoniker": "Controllers\\ProposalController.cs",
-              "ToolTip": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceAPI\\Controllers\\ProposalController.cs",
-              "RelativeToolTip": "Controllers\\ProposalController.cs",
-              "ViewState": "AgIAAGEAAAAAAAAAAAAQwL4AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-29T17:31:36.814Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "InsuranceService.cs",
-              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceAPI\\Services\\InsuranceService.cs",
-              "RelativeDocumentMoniker": "Services\\InsuranceService.cs",
-              "ToolTip": "C:\\Users\\Asus\\Desktop\\Automobile_backend\\InsuranceAPI\\Services\\InsuranceService.cs",
-              "RelativeToolTip": "Services\\InsuranceService.cs",
-              "ViewState": "AgIAADYAAAAAAAAAAAAYwEsAAAA7AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-27T18:55:55.858Z"
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e1b7d1f8-9b3c-49b1-8f4f-bfc63a88835d}"
             }
           ]
         }

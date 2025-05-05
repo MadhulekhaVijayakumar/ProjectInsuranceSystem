@@ -3,7 +3,9 @@ using InsuranceAPI.Interfaces;
 using InsuranceAPI.Misc;
 using InsuranceAPI.Models;
 using InsuranceAPI.Models.DTOs;
+using InsuranceAPI.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace InsuranceAPI.Services
 {
@@ -12,12 +14,14 @@ namespace InsuranceAPI.Services
         private readonly InsuranceManagementContext _context;
         private readonly ILogger<InsuranceService> _logger;
         private readonly InsurancePolicyNumberGenerator _policyNumberGenerator;
+        private readonly IRepository<int, Proposal> _proposalRepository;
 
-        public InsuranceService(InsuranceManagementContext context, ILogger<InsuranceService> logger, InsurancePolicyNumberGenerator policyNumberGenerator)
+        public InsuranceService(InsuranceManagementContext context, ILogger<InsuranceService> logger, InsurancePolicyNumberGenerator policyNumberGenerator, IRepository<int, Proposal> proposalRepository)
         {
             _context = context;
             _logger = logger;
             _policyNumberGenerator = policyNumberGenerator;
+            _proposalRepository = proposalRepository;
         }
 
 
@@ -58,6 +62,17 @@ namespace InsuranceAPI.Services
 
         public async Task<InsuranceResponse> GenerateInsuranceAsync(int proposalId)
         {
+            var proposal = await _context.Proposals
+                .FirstOrDefaultAsync(p => p.ProposalId == proposalId);
+
+            if (proposal == null)
+            {
+                _logger.LogError("Proposal not found for ID {ProposalId}", proposalId);
+                throw new Exception("Proposal not found");
+            }
+
+            if (proposal.Status != "payment successful")
+                throw new Exception("Payment is not made by the client");
             // Fetch related insurance details
             var insuranceDetails = await _context.InsuranceDetails
                 .FirstOrDefaultAsync(i => i.ProposalId == proposalId);
@@ -66,14 +81,6 @@ namespace InsuranceAPI.Services
             {
                 _logger.LogError("Insurance details not found for proposal ID {ProposalId}", proposalId);
                 throw new Exception("Insurance details not found.");
-            }
-
-            // Fetch the proposal
-            var proposal = await _context.Proposals.FindAsync(proposalId);
-            if (proposal == null)
-            {
-                _logger.LogError("Proposal not found for ID {ProposalId}", proposalId);
-                throw new Exception("Proposal not found.");
             }
 
             // Generate Insurance Policy Number using stored procedure
@@ -97,6 +104,7 @@ namespace InsuranceAPI.Services
             await _context.SaveChangesAsync();
 
             _logger.LogInformation("Insurance created with Policy Number {PolicyNumber} for Proposal ID {ProposalId}", policyNumber, proposalId);
+           
 
             // Return response
             return new InsuranceResponse
@@ -105,27 +113,132 @@ namespace InsuranceAPI.Services
                 VehicleId = proposal.VehicleId,
                 ClientId = proposal.ClientId,
                 InsurancePolicyNumber = insurance.InsurancePolicyNumber,
-                Status = insurance.Status,
-                PremiumAmount = insurance.PremiumAmount
+                PremiumAmount = insurance.PremiumAmount,
+                InsuranceStartDate=insurance.InsuranceStartDate,
+                InsuranceSum=insurance.InsuranceSum,
+                Status = insurance.Status
             };
         }
 
-
-
-        public async Task<InsuranceResponse> GetInsuranceByProposalIdAsync(int proposalId)
+        public async Task<InsuranceResponseDto> GetInsuranceByProposalIdForClientAsync(int proposalId, ClaimsPrincipal user)
         {
-            var insurance = await _context.Insurances.FirstOrDefaultAsync(i => i.ProposalId == proposalId);
+            var clientIdClaim = user.FindFirst(ClaimTypes.NameIdentifier);
+            if (clientIdClaim == null)
+                throw new UnauthorizedAccessException("Client ID not found in token.");
+
+            if (!int.TryParse(clientIdClaim.Value, out int clientId))
+                throw new UnauthorizedAccessException("Invalid Client ID in token.");
+
+            var insurance = await _context.Insurances
+                .Include(i => i.Vehicle)
+                .Include(i => i.Client)
+                .Include(i => i.Proposal)
+                .ThenInclude(p => p.InsuranceDetails)
+                .FirstOrDefaultAsync(i => i.ProposalId == proposalId && i.ClientId == clientId);
 
             if (insurance == null)
                 throw new Exception("Insurance not found.");
 
-            return new InsuranceResponse
+            var detail = insurance.Proposal?.InsuranceDetails;
+
+            return new InsuranceResponseDto
             {
                 InsurancePolicyNumber = insurance.InsurancePolicyNumber,
+                VehicleNumber = insurance.Vehicle?.VehicleNumber,
+                Name = insurance.Client?.Name,
+                InsuranceType = insurance.Proposal?.InsuranceType,
+                Plan = detail?.Plan,
+                InsuranceStartDate = insurance.InsuranceStartDate,
+                InsuranceSum = insurance.InsuranceSum,
+                PremiumAmount = insurance.PremiumAmount,
                 Status = insurance.Status,
-                PremiumAmount = insurance.PremiumAmount
+                ExpiryDate = insurance.InsuranceStartDate.AddMonths(12)
             };
         }
+        public async Task<List<InsuranceResponseDto>> GetAllInsurancesForClientAsync(ClaimsPrincipal user)
+        {
+            var clientIdClaim = user.FindFirst(ClaimTypes.NameIdentifier);
+            if (clientIdClaim == null)
+                throw new UnauthorizedAccessException("Client ID not found in token.");
+
+            if (!int.TryParse(clientIdClaim.Value, out int clientId))
+                throw new UnauthorizedAccessException("Invalid Client ID in token.");
+
+            var insurances = await _context.Insurances
+                .Include(i => i.Vehicle)
+                .Include(i => i.Client)
+                .Include(i => i.Proposal)
+                    .ThenInclude(p => p.InsuranceDetails)
+                .Where(i => i.ClientId == clientId)
+                .ToListAsync();
+
+            return insurances.Select(insurance =>
+            {
+                var detail = insurance.Proposal?.InsuranceDetails;
+                return new InsuranceResponseDto
+                {
+                    InsurancePolicyNumber = insurance.InsurancePolicyNumber,
+                    VehicleNumber = insurance.Vehicle?.VehicleNumber,
+                    Name = insurance.Client?.Name,
+                    InsuranceType = insurance.Proposal?.InsuranceType,
+                    Plan = detail?.Plan,
+                    InsuranceStartDate = insurance.InsuranceStartDate,
+                    InsuranceSum = insurance.InsuranceSum,
+                    PremiumAmount = insurance.PremiumAmount,
+                    Status = insurance.Status,
+                    ExpiryDate = insurance.InsuranceStartDate.AddMonths(12)
+                };
+            }).ToList();
+        }
+
+
+        public async Task<PaginatedResult<InsuranceResponseDto>> GetAllInsurancesForAdminAsync(int page, int pageSize)
+        {
+            var query = _context.Insurances
+                .Include(i => i.Vehicle)
+                .Include(i => i.Client)
+                .Include(i => i.Proposal)
+                    .ThenInclude(p => p.InsuranceDetails)
+                .AsQueryable();
+
+            var totalRecords = await query.CountAsync();
+
+            var insurances = await query
+                .OrderByDescending(i => i.InsuranceStartDate)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var results = insurances.Select(i =>
+            {
+                var detail = i.Proposal.InsuranceDetails;
+
+
+                return new InsuranceResponseDto
+                {
+                    InsurancePolicyNumber = i.InsurancePolicyNumber,
+                    VehicleNumber = i.Vehicle?.VehicleNumber,
+                    Name = i.Client?.Name,
+                    InsuranceType = i.Proposal?.InsuranceType,
+                    Plan = detail?.Plan,
+                    InsuranceStartDate = i.InsuranceStartDate,
+                    InsuranceSum = i.InsuranceSum,
+                    PremiumAmount = i.PremiumAmount,
+                    Status = i.Status,
+                    ExpiryDate = i.InsuranceStartDate.AddMonths(12)
+                };
+            }).ToList();
+
+            return new PaginatedResult<InsuranceResponseDto>
+            {
+                Data = results,
+                TotalRecords = totalRecords,
+                CurrentPage = page,
+                PageSize = pageSize
+            };
+        }
+
+
 
         public async Task<IEnumerable<ClientPolicyStatusDto>> GetClientPolicyStatusAsync(int clientId)
         {
@@ -133,11 +246,9 @@ namespace InsuranceAPI.Services
                 .Include(p => p.Vehicle)
                 .Include(p => p.InsuranceDetails)
                 .Include(p => p.Insurance)
-                .Where(p => p.ClientId == clientId)
+                .Where(p => p.ClientId == clientId && p.Insurance == null)
                 .ToListAsync();
 
-            if (!proposals.Any())
-                throw new Exception("No proposals found for the client.");
 
             var result = proposals.Select(p => new ClientPolicyStatusDto
             {
@@ -152,9 +263,7 @@ namespace InsuranceAPI.Services
                 InsuranceStartDate = p.InsuranceDetails?.InsuranceStartDate,
                 InsuranceSum = p.InsuranceDetails?.InsuranceSum,
 
-                InsurancePolicyNumber = p.Insurance?.InsurancePolicyNumber,
-                InsuranceStatus = p.Insurance?.Status,
-                InsuranceCreatedAt = p.Insurance?.CreatedAt
+   
             });
 
             return result;
@@ -170,7 +279,23 @@ namespace InsuranceAPI.Services
                 .FirstOrDefaultAsync(i => i.InsurancePolicyNumber == policyNumber);
         }
 
+        public async Task<IEnumerable<ProposalReviewDto>> GetPaidProposals()
+        {
+            var proposals = await _proposalRepository.GetAll();
 
+            var result = proposals
+                .Where(p => p.Status == "payment successful" && p.Insurance == null)
+                .Select(p => new ProposalReviewDto
+                {
+                    ClientId = p.ClientId,
+                    ClientName = p.Client?.Name ?? "Unknown",
+                    ProposalId = p.ProposalId,
+                    InsuranceType = p.InsuranceType,
+                    Status = p.Status
+                });
+
+            return result;
+        }
     }
 
 

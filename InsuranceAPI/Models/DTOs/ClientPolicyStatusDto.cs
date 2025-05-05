@@ -13,8 +13,6 @@
         public DateTime? InsuranceStartDate { get; set; }
         public decimal? InsuranceSum { get; set; }
 
-        public string? InsurancePolicyNumber { get; set; } // From Insurance (if payment done)
-        public string? InsuranceStatus { get; set; } // "quote generated", "active", etc.
-        public DateTime? InsuranceCreatedAt { get; set; }
+
     }
 }

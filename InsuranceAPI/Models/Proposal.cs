@@ -26,7 +26,7 @@ namespace InsuranceAPI.Models
 
         [Required]
         [Column(TypeName = "date")]
-        public DateTime InsuranceValidUpto { get; set; }
+        public DateTime? InsuranceValidUpto { get; set; }
 
         [Required]
         [Column(TypeName = "date")]

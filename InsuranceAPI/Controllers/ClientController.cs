@@ -91,6 +91,21 @@ namespace InsuranceAPI.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+        [Authorize(Roles = "Admin")]
+        [HttpGet("AllClient")]
+        public async Task<IActionResult> GetAllClients([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            try
+            {
+                var result = await _clientService.GetAllClients(pageNumber, pageSize);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (you can use a logging framework here)
+                return StatusCode(500, new { message = "An error occurred while fetching clients.", error = ex.Message });
+            }
+        }
 
 
 

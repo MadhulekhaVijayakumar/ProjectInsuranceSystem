@@ -53,10 +53,10 @@ namespace InsuranceAPI.Services
             // Damage Insurance
             switch (details.DamageInsurance.ToLower())
             {
-                case "partial":
+                case "false":
                     premium += 750;
                     break;
-                case "full":
+                case "true":
                     premium += 1500;
                     break;
             }

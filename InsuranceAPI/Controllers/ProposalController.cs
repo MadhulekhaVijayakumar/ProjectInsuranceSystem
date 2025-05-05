@@ -114,7 +114,17 @@ namespace InsuranceAPI.Controllers
                     return NotFound(new { message = "Document not found for the specified proposal and file type." });
 
                 var (fileData, fileName) = result.Value;
-                var contentType = "application/octet-stream"; // Optionally, determine MIME type based on file extension
+                var extension = Path.GetExtension(fileName).ToLowerInvariant();
+                var contentType = extension switch
+                {
+                    ".pdf" => "application/pdf",
+                    ".doc" => "application/msword",
+                    ".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                    ".jpg" or ".jpeg" => "image/jpeg",
+                    ".png" => "image/png",
+                    _ => "application/octet-stream"
+                };
+
 
                 return File(fileData, contentType, fileName);
             }

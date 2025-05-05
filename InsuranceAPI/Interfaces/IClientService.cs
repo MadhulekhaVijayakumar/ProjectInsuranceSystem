@@ -10,7 +10,7 @@ namespace InsuranceAPI.Interfaces
         Task<ClientProfileResponse> GetClientProfile(int clientId);
         Task<ClientProfileResponse> UpdateClientProfile(int clientId, UpdateClientRequest request);
 
-        Task<IEnumerable<ClientProfileResponse>> GetAllClients();
+        Task<PaginatedResult<ClientProfileResponse>> GetAllClients(int pageNumber, int pageSize);
         Task<IEnumerable<ClientProfileResponse>> SearchClients(string keyword);
         Task<bool> ChangeClientPassword(string email, string oldPassword, string newPassword);
 

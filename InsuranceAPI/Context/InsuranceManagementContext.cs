@@ -17,6 +17,8 @@ namespace InsuranceAPI.Context
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Document> Documents { get; set; }
         public DbSet<InsuranceClaim> InsuranceClaims { get; set; }
+        public DbSet<ActivityLog> ActivityLog { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // ---------------- USER RELATIONSHIPS ----------------

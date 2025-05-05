@@ -7,60 +7,58 @@ using InsuranceAPI.Repositories;
 using InsuranceAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace InsuranceAPITests.Services
 {
+    [TestFixture]
     public class ClientServiceTests
     {
         private IMapper _mapper;
         private ClientService _clientService;
         private IRepository<string, User> _userRepository;
         private IRepository<int, Client> _clientRepository;
+        private InsuranceManagementContext _context;
 
         [SetUp]
         public void Setup()
         {
-            // InMemory DbContext
             var options = new DbContextOptionsBuilder<InsuranceManagementContext>()
-                .UseInMemoryDatabase(databaseName: "InsuranceTestDB")
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // fresh DB per test run
                 .Options;
 
-            var context = new InsuranceManagementContext(options);
+            _context = new InsuranceManagementContext(options);
+            _userRepository = new UserRepository(_context);
+            _clientRepository = new ClientRepository(_context);
 
-            _userRepository = new UserRepository(context);
-            _clientRepository = new ClientRepository(context);
-
-            // AutoMapper configuration
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Client, ClientProfileResponse>();
             });
-            _mapper = config.CreateMapper();
 
+            _mapper = config.CreateMapper();
             _clientService = new ClientService(_userRepository, _clientRepository, _mapper);
         }
 
         [Test]
         public async Task CreateClient_ShouldReturnClientResponse()
         {
-            // Arrange
             var request = new CreateClientRequest
             {
-                Name = "Karthi",
-                DateOfBirth = new DateTime(2000, 1, 1),
-                Gender = "Male",
-                PhoneNumber = "9876543210",
-                Email = "karthi@gmail.com",
-                AadhaarNumber = "123412341234",
-                PANNumber = "ABCDE1234F",
-                Address = "Chennimalai",
-                Password = "Password123"
+                Name = "Alice Johnson",
+                DateOfBirth = new DateTime(1990, 1, 1),
+                Gender = "Female",
+                PhoneNumber = "9000011111",
+                Email = "alice@example.com",
+                AadhaarNumber = "123456789012",
+                PANNumber = "ALICE1234J",
+                Address = "Wonderland",
+                Password = "SecurePass1"
             };
 
-            // Act
             var result = await _clientService.CreateClient(request);
 
-            // Assert
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Id, Is.GreaterThan(0));
         }
@@ -68,61 +66,156 @@ namespace InsuranceAPITests.Services
         [Test]
         public async Task GetClientProfile_ShouldReturnProfile()
         {
-            // Arrange
             var request = new CreateClientRequest
             {
-                Name = "Karthi",
-                DateOfBirth = new DateTime(2000, 1, 1),
+                Name = "Bob Smith",
+                DateOfBirth = new DateTime(1985, 6, 15),
                 Gender = "Male",
-                PhoneNumber = "9876543210",
-                Email = "karthi2@gmail.com",
-                AadhaarNumber = "567856785678",
-                PANNumber = "WXYZ1234L",
-                Address = "Erode",
-                Password = "Secret123"
+                PhoneNumber = "9887766554",
+                Email = "bob@example.com",
+                AadhaarNumber = "111122223333",
+                PANNumber = "BOBSM1234S",
+                Address = "Springfield",
+                Password = "TestPass123"
             };
 
-            var createResponse = await _clientService.CreateClient(request);
+            var created = await _clientService.CreateClient(request);
+            var profile = await _clientService.GetClientProfile(created.Id);
 
-            // Act
-            var profile = await _clientService.GetClientProfile(createResponse.Id);
-
-            // Assert
-            Assert.That(profile.Name, Is.EqualTo("Karthi"));
-            Assert.That(profile.Email, Is.EqualTo("karthi2@gmail.com"));
+            Assert.That(profile.Name, Is.EqualTo("Bob Smith"));
+            Assert.That(profile.Email, Is.EqualTo("bob@example.com"));
         }
 
         [Test]
         public async Task UpdateClientProfile_ShouldUpdateSuccessfully()
         {
-            // Arrange
             var request = new CreateClientRequest
             {
-                Name = "Karthik",
-                DateOfBirth = new DateTime(1999, 5, 5),
+                Name = "Charlie Brown",
+                DateOfBirth = new DateTime(1995, 9, 9),
                 Gender = "Male",
-                PhoneNumber = "9000000000",
-                Email = "karthik@gmail.com",
-                AadhaarNumber = "999988887777",
-                PANNumber = "PQRS1234T",
-                Address = "Salem",
-                Password = "NewPass123"
+                PhoneNumber = "9111222233",
+                Email = "charlie@example.com",
+                AadhaarNumber = "444455556666",
+                PANNumber = "CHARL1234B",
+                Address = "Peanuts Town",
+                Password = "OldPassword1"
             };
 
             var created = await _clientService.CreateClient(request);
 
             var updateRequest = new UpdateClientRequest
             {
-                NameUpdate = new NameUpdate { NewName = "Karthikeyan" },
-                PhoneUpdate = new PhoneUpdate { NewPhoneNumber = "9123456789" }
+                NameUpdate = new NameUpdate { NewName = "Charles Brown" },
+                PhoneUpdate = new PhoneUpdate { NewPhoneNumber = "9111000000" }
             };
 
-            // Act
-            var updatedProfile = await _clientService.UpdateClientProfile(created.Id, updateRequest);
+            var updated = await _clientService.UpdateClientProfile(created.Id, updateRequest);
 
-            // Assert
-            Assert.That(updatedProfile.Name, Is.EqualTo("Karthikeyan"));
-            Assert.That(updatedProfile.PhoneNumber, Is.EqualTo("9123456789"));
+            Assert.That(updated.Name, Is.EqualTo("Charles Brown"));
+            Assert.That(updated.PhoneNumber, Is.EqualTo("9111000000"));
         }
+
+        [Test]
+        public async Task ChangeClientPassword_ShouldSucceedWithCorrectOldPassword()
+        {
+            var request = new CreateClientRequest
+            {
+                Name = "Diana Prince",
+                DateOfBirth = new DateTime(1988, 4, 4),
+                Gender = "Female",
+                PhoneNumber = "9999888877",
+                Email = "diana@example.com",
+                AadhaarNumber = "999988887777",
+                PANNumber = "DIANA1234P",
+                Address = "Themyscira",
+                Password = "Original123"
+            };
+
+            await _clientService.CreateClient(request);
+
+            var result = await _clientService.ChangeClientPassword("diana@example.com", "Original123", "NewSecure123");
+
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public async Task GetAllClients_ShouldReturnPaginatedClients()
+        {
+            // Add multiple clients
+            for (int i = 0; i < 5; i++)
+            {
+                await _clientService.CreateClient(new CreateClientRequest
+                {
+                    Name = $"Client {i}",
+                    DateOfBirth = new DateTime(1990, 1, 1),
+                    Gender = "Other",
+                    PhoneNumber = $"900000000{i}",
+                    Email = $"client{i}@example.com",
+                    AadhaarNumber = $"11112222333{i}",
+                    PANNumber = $"PANCL{i}1234",
+                    Address = $"Address {i}",
+                    Password = "Password123"
+                });
+            }
+
+            var pagedResult = await _clientService.GetAllClients(1, 3); // Page 1, 3 items
+
+            Assert.That(pagedResult.Data.Count, Is.EqualTo(3));
+            Assert.That(pagedResult.TotalRecords, Is.EqualTo(5));
+            Assert.That(pagedResult.CurrentPage, Is.EqualTo(1));
+        }
+
+        [Test]
+        public async Task SearchClients_ShouldReturnMatchingResults()
+        {
+            await _clientService.CreateClient(new CreateClientRequest
+            {
+                Name = "Eva Long",
+                DateOfBirth = new DateTime(1992, 10, 10),
+                Gender = "Female",
+                PhoneNumber = "8111222233",
+                Email = "eva@example.com",
+                AadhaarNumber = "777766665555",
+                PANNumber = "EVALO1234L",
+                Address = "Paradise City",
+                Password = "EvaPassword"
+            });
+
+            var matches = await _clientService.SearchClients("Eva");
+
+            Assert.That(matches.Any(), Is.True);
+            Assert.That(matches.First().Email, Is.EqualTo("eva@example.com"));
+        }
+        [Test]
+        public void ChangeClientPassword_ShouldFailWithIncorrectOldPassword()
+        {
+            var request = new CreateClientRequest
+            {
+                Name = "Bruce Wayne",
+                DateOfBirth = new DateTime(1975, 2, 19),
+                Gender = "Male",
+                PhoneNumber = "9876543210",
+                Email = "bruce@wayneenterprises.com",
+                AadhaarNumber = "999911112222",
+                PANNumber = "BRUCE1234W",
+                Address = "Gotham",
+                Password = "DarkKnight1"
+            };
+
+            Assert.DoesNotThrowAsync(async () => await _clientService.CreateClient(request));
+
+            var ex = Assert.ThrowsAsync<Exception>(async () =>
+                await _clientService.ChangeClientPassword("bruce@wayneenterprises.com", "WrongPassword", "NewPass123"));
+
+            Assert.That(ex.Message, Is.EqualTo("Old password is incorrect"));
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _context.Dispose();
+        }
+
     }
 }

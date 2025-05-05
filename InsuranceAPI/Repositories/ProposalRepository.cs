@@ -30,6 +30,7 @@ namespace InsuranceAPI.Repositories
                 .Include(p => p.Vehicle)
                 .Include(p => p.InsuranceDetails)
                 .Include(p => p.Documents)
+                .Include(p => p.Insurance)
                 .ToListAsync();
 
             if (proposals.Count == 0)

@@ -18,6 +18,7 @@ namespace InsuranceAPI.Services
         private readonly ILogger<ProposalService> _logger;
         private readonly IDocumentService _documentService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IActivityLogService _activityLogService;
         private readonly IRepository<int, Document> _documentRepository;
 
 
@@ -29,8 +30,9 @@ namespace InsuranceAPI.Services
             IRepository<int,Document> documentRepository,
             IPremiumCalculatorService premiumCalculatorService,
             IDocumentService documentService,
-           ILogger<ProposalService> logger,
-            IHttpContextAccessor httpContextAccessor)
+            ILogger<ProposalService> logger,
+            IHttpContextAccessor httpContextAccessor,
+            IActivityLogService activityLogService)
         {
             _proposalRepository = proposalRepo;
             _vehicleRepository = vehicleRepo;
@@ -40,6 +42,7 @@ namespace InsuranceAPI.Services
             _documentService = documentService;
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
+            _activityLogService = activityLogService;
         }
 
         public async Task<CreateProposalResponse> SubmitProposalWithDetails(CreateProposalRequest request)
@@ -219,6 +222,10 @@ namespace InsuranceAPI.Services
 
             proposal.Status = approve ? "approved" : "rejected";
             await _proposalRepository.Update(proposalId, proposal);
+            var adminName = _httpContextAccessor.HttpContext?.User?.Identity?.Name ?? "Unknown Admin";
+            await _activityLogService.LogActivityAsync(adminName, $"Verified proposal #{proposalId}: {(approve ? "approved" : "rejected")}");
+
+
             return true;
         }
 
@@ -254,7 +261,7 @@ namespace InsuranceAPI.Services
                     VehicleNumber = p.Vehicle?.VehicleNumber ?? "Unknown", // Safely check if Vehicle is null
                     Status = p.Status,
                     InsuranceType = p.InsuranceType ?? "Not Available", // Access directly from Proposal table
-                    InsuranceValidUpto = p.InsuranceValidUpto , // Access directly from Proposal table
+                    InsuranceValidUpto = p.InsuranceValidUpto ?? DateTime.MinValue, // Access directly from Proposal table
                     FitnessValidUpto = p.FitnessValidUpto, // Access directly from Proposal table
                     CreatedAt = p.CreatedAt
                 })
@@ -307,10 +314,7 @@ namespace InsuranceAPI.Services
             return result;
         }
 
-
-
-
-
+        
 
 
 
